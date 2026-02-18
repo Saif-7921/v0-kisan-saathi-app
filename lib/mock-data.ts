@@ -332,6 +332,159 @@ export const equipmentTypes = [
   "Sprayer",
 ]
 
+// ---- Disease Detection Mock Data ----
+export interface DiseaseResult {
+  id: number
+  name: string
+  scientificName: string
+  type: string
+  confidence: number
+  severity: "Severe" | "Moderate" | "Mild"
+  cropAffectedPct: number
+  description: string
+  causes: string
+  weatherCause: string
+  affectedParts: string[]
+  treatment: { name: string; dosage: string; cost: number }[]
+  recoveryTimeline: string
+  expectedYield: number
+  estimatedActualYield: number
+  marketPrice: number
+}
+
+export const diseaseDatabase: DiseaseResult[] = [
+  {
+    id: 1,
+    name: "Rice Blast Disease",
+    scientificName: "Magnaporthe oryzae",
+    type: "Fungal",
+    confidence: 94,
+    severity: "Severe",
+    cropAffectedPct: 65,
+    description:
+      "Rice blast is one of the most destructive diseases of rice worldwide. It causes diamond-shaped lesions on leaves that can rapidly expand and kill the entire leaf tissue, leading to significant yield losses.",
+    causes:
+      "High humidity (>80%), prolonged leaf wetness from dew or rain, moderate temperatures (20-28\u00b0C), excessive nitrogen fertilization, and susceptible rice varieties create ideal conditions for this disease.",
+    weatherCause:
+      "Recent heavy rainfall (87mm over 3 days) combined with high humidity (89%) and moderate temperatures (28\u00b0C) created perfect conditions for Magnaporthe oryzae spore germination.",
+    affectedParts: ["leaves", "stems", "nodes"],
+    treatment: [
+      { name: "Tricyclazole 75% WP (Beam)", dosage: "300g per acre in 200L water", cost: 450 },
+      { name: "Isoprothiolane 40% EC (Fujione)", dosage: "500ml per acre in 200L water", cost: 380 },
+      { name: "Carbendazim 50% WP (Bavistin)", dosage: "250g per acre in 200L water", cost: 220 },
+    ],
+    recoveryTimeline:
+      "With immediate treatment, partial recovery in 10-14 days. Full recovery unlikely at 65% infection. New growth may recover in 3-4 weeks.",
+    expectedYield: 25,
+    estimatedActualYield: 9,
+    marketPrice: 2200,
+  },
+  {
+    id: 2,
+    name: "Cotton Leaf Curl Virus",
+    scientificName: "Begomovirus (CLCuV)",
+    type: "Viral",
+    confidence: 87,
+    severity: "Moderate",
+    cropAffectedPct: 45,
+    description:
+      "Cotton leaf curl disease causes upward curling of leaves, thickening of veins, and formation of cup-shaped leaf lamina. It is spread by whitefly (Bemisia tabaci) and can cause significant fiber quality reduction.",
+    causes:
+      "Whitefly (Bemisia tabaci) population buildup due to warm dry weather, late sowing of cotton, proximity to infected fields, and lack of pest management during early growth stages.",
+    weatherCause:
+      "Extended dry spell followed by warm temperatures (30-35\u00b0C) promoted whitefly proliferation. Low wind speeds allowed pest population to concentrate in the field.",
+    affectedParts: ["leaves", "stems"],
+    treatment: [
+      { name: "Imidacloprid 17.8% SL (Confidor)", dosage: "100ml per acre in 200L water", cost: 520 },
+      { name: "Thiamethoxam 25% WG (Actara)", dosage: "100g per acre in 200L water", cost: 480 },
+      { name: "Neem oil 1500 PPM", dosage: "1L per acre in 200L water", cost: 180 },
+    ],
+    recoveryTimeline:
+      "Viral infection cannot be cured once established. Focus on vector control to prevent spread. New growth in 2-3 weeks may be healthy if whitefly controlled.",
+    expectedYield: 12,
+    estimatedActualYield: 7,
+    marketPrice: 6500,
+  },
+  {
+    id: 3,
+    name: "Tomato Early Blight",
+    scientificName: "Alternaria solani",
+    type: "Fungal",
+    confidence: 91,
+    severity: "Mild",
+    cropAffectedPct: 30,
+    description:
+      "Early blight causes dark, concentric ring-patterned spots on lower leaves first, progressing upward. Affected leaves turn yellow and drop. Fruits may develop sunken, leathery spots near the stem end.",
+    causes:
+      "Warm humid conditions (24-29\u00b0C), overhead irrigation, crowded plant spacing, nutrient-deficient soil, and presence of crop debris from previous seasons harbor the pathogen.",
+    weatherCause:
+      "Alternating wet and warm periods over the past 2 weeks with temperatures averaging 27\u00b0C and intermittent rainfall provided ideal infection conditions.",
+    affectedParts: ["leaves"],
+    treatment: [
+      { name: "Mancozeb 75% WP (Dithane M-45)", dosage: "500g per acre in 200L water", cost: 280 },
+      { name: "Chlorothalonil 75% WP (Kavach)", dosage: "400g per acre in 200L water", cost: 350 },
+      { name: "Copper Oxychloride 50% WP (Blitox)", dosage: "500g per acre in 200L water", cost: 240 },
+    ],
+    recoveryTimeline:
+      "Good recovery expected with treatment. Visible improvement in 7-10 days. Full recovery of new foliage in 2-3 weeks. Yield impact limited at 30% infection.",
+    expectedYield: 80,
+    estimatedActualYield: 56,
+    marketPrice: 1800,
+  },
+  {
+    id: 4,
+    name: "Wheat Rust",
+    scientificName: "Puccinia triticina",
+    type: "Fungal",
+    confidence: 96,
+    severity: "Severe",
+    cropAffectedPct: 70,
+    description:
+      "Wheat rust produces orange-brown pustules on leaf surfaces that release millions of spores. Severe infections can destroy the leaf canopy, drastically reducing grain filling and causing shriveled grains.",
+    causes:
+      "Cool nights (15-20\u00b0C) with warm days (20-25\u00b0C), high humidity, dew formation, wind-blown spores from nearby infected fields, and susceptible wheat varieties planted across the region.",
+    weatherCause:
+      "Ideal rust development conditions: daytime temperatures of 22\u00b0C, nighttime 16\u00b0C, heavy dew formation, and 78% average humidity over the past week.",
+    affectedParts: ["leaves", "stems"],
+    treatment: [
+      { name: "Propiconazole 25% EC (Tilt)", dosage: "200ml per acre in 200L water", cost: 550 },
+      { name: "Tebuconazole 25.9% EC (Folicur)", dosage: "200ml per acre in 200L water", cost: 480 },
+      { name: "Mancozeb 75% WP (Dithane M-45)", dosage: "500g per acre in 200L water", cost: 280 },
+    ],
+    recoveryTimeline:
+      "At 70% infection during grain filling, significant yield loss is inevitable. Fungicide application can protect remaining healthy tissue. Expect 3-4 week stabilization period.",
+    expectedYield: 20,
+    estimatedActualYield: 6,
+    marketPrice: 2400,
+  },
+  {
+    id: 5,
+    name: "Sugarcane Red Rot",
+    scientificName: "Colletotrichum falcatum",
+    type: "Fungal",
+    confidence: 82,
+    severity: "Moderate",
+    cropAffectedPct: 50,
+    description:
+      "Red rot causes reddening of internal cane tissue with white patches. Infected canes show wilting of crown leaves, discoloration of stem, and a characteristic alcohol smell when split open.",
+    causes:
+      "Waterlogged conditions, infected seed cane (sett-borne disease), mechanical injuries from harvesting, rat damage providing entry points, and high soil moisture during monsoon season.",
+    weatherCause:
+      "Excessive rainfall (120mm over 5 days) causing waterlogging, combined with high temperature (30\u00b0C) and humidity (85%), activated latent Colletotrichum infections in the field.",
+    affectedParts: ["stems"],
+    treatment: [
+      { name: "Carbendazim 50% WP (Bavistin)", dosage: "250g per acre in 200L water", cost: 220 },
+      { name: "Thiophanate Methyl 70% WP", dosage: "300g per acre in 200L water", cost: 380 },
+      { name: "Trichoderma viride (Bio-agent)", dosage: "2kg per acre in soil application", cost: 150 },
+    ],
+    recoveryTimeline:
+      "Red rot recovery is limited once internal tissue is damaged. Healthy ratoon may emerge in 4-6 weeks. Severely affected canes should be removed to prevent spread.",
+    expectedYield: 350,
+    estimatedActualYield: 175,
+    marketPrice: 315,
+  },
+]
+
 export const monthlyEarnings = [
   { month: "Sep", claims: 0, rental: 1200 },
   { month: "Oct", claims: 15000, rental: 2400 },
