@@ -725,15 +725,15 @@ function ResultsScreen({
 }
 
 /* ================ SCREEN 4: Insurance Report ================ */
-function ReportScreen({
-  result,
-  onBack,
-  onFileClaim,
-}: {
+interface ReportScreenProps {
   result: DiseaseResult
   onBack: () => void
   onFileClaim?: () => void
-}) {
+}
+
+function ReportScreen(reportProps: ReportScreenProps) {
+  const { result, onBack } = reportProps
+  const handleFileClaim = reportProps.onFileClaim
   const { t } = useLanguage()
   const reportId = `KS-2024-${Math.floor(100000 + Math.random() * 900000)}`
   const now = new Date()
@@ -910,7 +910,7 @@ function ReportScreen({
 
       {/* Action Buttons - Sticky */}
       <div className="sticky bottom-20 grid grid-cols-2 gap-2 bg-background/95 py-3 backdrop-blur-sm md:grid-cols-4">
-        <Button size="lg" className="min-h-12 gap-2 bg-primary text-sm text-primary-foreground" onClick={onFileClaim}>
+        <Button size="lg" className="min-h-12 gap-2 bg-primary text-sm text-primary-foreground" onClick={handleFileClaim}>
           <Send className="size-4" />
           {t("Submit Claim", "दावा जमा करें", "క్లెయిమ్ సమర్పించు")}
         </Button>
