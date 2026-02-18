@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   FileText,
   MapPin,
@@ -33,7 +33,11 @@ interface ClaimStep6Props {
 export function ClaimStep6GenerateReport({ claimData }: ClaimStep6Props) {
   const { t } = useLanguage()
   const [submitted, setSubmitted] = useState(false)
-  const claimRef = "CLM-2025-" + String(Math.floor(Math.random() * 9000) + 1000)
+  const [claimRef, setClaimRef] = useState("CLM-2025-0000")
+
+  useEffect(() => {
+    setClaimRef("CLM-2025-" + String(Math.floor(Math.random() * 9000) + 1000))
+  }, [])
 
   return (
     <div className="flex flex-col gap-4">

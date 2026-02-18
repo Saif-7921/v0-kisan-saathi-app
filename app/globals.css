@@ -56,6 +56,7 @@
 @theme inline {
   --font-sans: 'DM Sans', sans-serif;
   --font-serif: 'Mukta', sans-serif;
+  --font-libre: 'Libre Baskerville', serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

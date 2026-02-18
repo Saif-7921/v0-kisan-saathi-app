@@ -43,7 +43,7 @@ export function ProfilePage() {
           </div>
           <div className="text-center">
             <p className="font-serif text-xl font-bold">{farmerProfile.name}</p>
-            <p className="text-sm text-muted-foreground font-serif">{farmerProfile.nameHindi}</p>
+            <p className="font-serif text-sm text-muted-foreground">{farmerProfile.nameHindi}</p>
             <div className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
               <MapPin className="size-3" />
               <span>

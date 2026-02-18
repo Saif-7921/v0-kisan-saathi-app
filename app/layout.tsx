@@ -16,6 +16,13 @@ const mukta = Mukta({
   display: "swap",
 })
 
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-libre",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "KisanSaathi - Smart Farming Assistant",
   description:
@@ -36,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${mukta.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${mukta.variable} ${libreBaskerville.variable}`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />
