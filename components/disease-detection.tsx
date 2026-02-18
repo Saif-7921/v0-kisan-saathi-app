@@ -47,9 +47,10 @@ type Screen = "upload" | "processing" | "results" | "report"
 
 interface DiseaseDetectionProps {
   onBack: () => void
+  onFileClaim?: () => void
 }
 
-export function DiseaseDetection({ onBack }: DiseaseDetectionProps) {
+export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps) {
   const [screen, setScreen] = useState<Screen>("upload")
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [result, setResult] = useState<DiseaseResult | null>(null)
@@ -907,9 +908,9 @@ function ReportScreen({
 
       {/* Action Buttons - Sticky */}
       <div className="sticky bottom-20 grid grid-cols-2 gap-2 bg-background/95 py-3 backdrop-blur-sm md:grid-cols-4">
-        <Button size="lg" className="min-h-12 gap-2 bg-primary text-sm text-primary-foreground">
+        <Button size="lg" className="min-h-12 gap-2 bg-primary text-sm text-primary-foreground" onClick={onFileClaim}>
           <Send className="size-4" />
-          {t("Submit", "जमा करें", "సమర్పించు")}
+          {t("Submit Claim", "दावा जमा करें", "క్లెయిమ్ సమర్పించు")}
         </Button>
         <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
           <Download className="size-4" />

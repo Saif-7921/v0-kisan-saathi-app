@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LanguageProvider } from "@/lib/language-context"
 import { BottomNav, type TabId } from "@/components/bottom-nav"
 import { OfflineBanner } from "@/components/offline-banner"
@@ -9,14 +9,37 @@ import { CropLossClaim } from "@/components/crop-loss-claim"
 import { EquipmentMarketplace } from "@/components/equipment-marketplace"
 import { ClaimsDashboard } from "@/components/claims-dashboard"
 import { ProfilePage } from "@/components/profile-page"
+import { DiseaseDetection } from "@/components/disease-detection"
 
 export default function KisanSaathiApp() {
+  const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<TabId>("home")
+  const [showDisease, setShowDisease] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex size-12 items-center justify-center rounded-xl bg-primary">
+            <span className="text-lg font-bold text-primary-foreground">K</span>
+          </div>
+          <p className="text-sm text-muted-foreground">Loading KisanSaathi...</p>
+        </div>
+      </div>
+    )
+  }
 
   const renderTab = () => {
+    if (showDisease) {
+      return <DiseaseDetection onBack={() => setShowDisease(false)} onFileClaim={() => { setShowDisease(false); setActiveTab("claim") }} />
+    }
     switch (activeTab) {
       case "home":
-        return <HomeDashboard onNavigate={setActiveTab} />
+        return <HomeDashboard onNavigate={setActiveTab} onDetectDisease={() => setShowDisease(true)} />
       case "claim":
         return <CropLossClaim />
       case "equipment":
