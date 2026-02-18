@@ -134,7 +134,7 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
         />
       )}
       {screen === "report" && result && (
-        <ReportScreen result={result} onBack={() => setScreen("results")} />
+        <ReportScreen result={result} onBack={() => setScreen("results")} onFileClaim={onFileClaim} />
       )}
     </div>
   )
@@ -728,9 +728,11 @@ function ResultsScreen({
 function ReportScreen({
   result,
   onBack,
+  onFileClaim,
 }: {
   result: DiseaseResult
   onBack: () => void
+  onFileClaim?: () => void
 }) {
   const { t } = useLanguage()
   const reportId = `KS-2024-${Math.floor(100000 + Math.random() * 900000)}`
