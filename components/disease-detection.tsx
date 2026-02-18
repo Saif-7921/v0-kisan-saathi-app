@@ -11,18 +11,9 @@ import {
   ShoppingBag,
   RefreshCw,
   FileText,
-  Share2,
-  Download,
-  Printer,
-  Send,
-  MapPin,
-  Shield,
+  Leaf,
   CloudSun,
   Thermometer,
-  Droplets,
-  IndianRupee,
-  QrCode,
-  Leaf,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -35,7 +26,8 @@ import {
 } from "@/components/ui/accordion"
 import { useLanguage } from "@/lib/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
-import { diseaseDatabase, farmerProfile } from "@/lib/mock-data"
+import { ReportScreen } from "@/components/report-screen"
+import { diseaseDatabase } from "@/lib/mock-data"
 import type { DiseaseResult } from "@/lib/mock-data"
 import {
   RadialBarChart,
@@ -85,7 +77,7 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
             <ArrowLeft className="size-5" />
           </button>
           <h1 className="font-serif text-xl font-bold" style={{ fontSize: "clamp(1.1rem, 3vw, 1.5rem)" }}>
-            {t("Crop Disease Detection", "फसल रोग पहचान", "పంట వ్యాధి గుర్తింపు")}
+            {t("Crop Disease Detection", "\u092B\u0938\u0932 \u0930\u094B\u0917 \u092A\u0939\u091A\u093E\u0928", "\u0C2A\u0C02\u0C1F \u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F \u0C17\u0C41\u0C30\u0C4D\u0C24\u0C3F\u0C02\u0C2A\u0C41")}
           </h1>
         </div>
         <LanguageToggle />
@@ -195,15 +187,15 @@ function UploadScreen({
           <p className="font-serif text-lg font-bold text-foreground">
             {t(
               "Upload or capture your crop photo",
-              "अपनी फसल की फोटो अपलोड करें",
-              "మీ పంట ఫోటో అప్‌లోడ్ చేయండి"
+              "\u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u0915\u0940 \u092B\u094B\u091F\u094B \u0905\u092A\u0932\u094B\u0921 \u0915\u0930\u0947\u0902",
+              "\u0C2E\u0C40 \u0C2A\u0C02\u0C1F \u0C2B\u0C4B\u0C1F\u0C4B \u0C05\u0C2A\u0C4D\u200C\u0C32\u0C4B\u0C21\u0C4D \u0C1A\u0C47\u0C2F\u0C02\u0C21\u0C3F"
             )}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
               "Supports JPG, PNG \u2014 Max 10MB",
-              "JPG, PNG \u2014 अधिकतम 10MB",
-              "JPG, PNG \u2014 గరిష్టంగా 10MB"
+              "JPG, PNG \u2014 \u0905\u0927\u093F\u0915\u0924\u092E 10MB",
+              "JPG, PNG \u2014 \u0C17\u0C30\u0C3F\u0C37\u0C4D\u0C1F\u0C02\u0C17\u0C3E 10MB"
             )}
           </p>
         </div>
@@ -216,7 +208,7 @@ function UploadScreen({
             onClick={() => cameraInputRef.current?.click()}
           >
             <Camera className="size-5" />
-            {t("Take Photo", "फोटो लें", "ఫోటో తీయండి")}
+            {t("Take Photo", "\u092B\u094B\u091F\u094B \u0932\u0947\u0902", "\u0C2B\u0C4B\u0C1F\u0C4B \u0C24\u0C40\u0C2F\u0C02\u0C21\u0C3F")}
           </Button>
           <Button
             size="lg"
@@ -225,7 +217,7 @@ function UploadScreen({
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload className="size-5" />
-            {t("Upload", "अपलोड", "అప్‌లోడ్")}
+            {t("Upload", "\u0905\u092A\u0932\u094B\u0921", "\u0C05\u0C2A\u0C4D\u200C\u0C32\u0C4B\u0C21\u0C4D")}
           </Button>
         </div>
 
@@ -269,30 +261,30 @@ function UploadScreen({
         <Volume2 className="size-4 text-primary" />
         {t(
           "Tap to hear instructions",
-          "निर्देश सुनने के लिए टैप करें",
-          "సూచనలు వినడానికి నొక్కండి"
+          "\u0928\u093F\u0930\u094D\u0926\u0947\u0936 \u0938\u0941\u0928\u0928\u0947 \u0915\u0947 \u0932\u093F\u090F \u091F\u0948\u092A \u0915\u0930\u0947\u0902",
+          "\u0C38\u0C42\u0C1A\u0C28\u0C32\u0C41 \u0C35\u0C3F\u0C28\u0C21\u0C3E\u0C28\u0C3F\u0C15\u0C3F \u0C28\u0C4A\u0C15\u0C4D\u0C15\u0C02\u0C21\u0C3F"
         )}
       </Button>
 
       {/* Example Guide Strip */}
       <div>
         <p className="mb-2 text-xs font-medium text-muted-foreground">
-          {t("Photo Examples:", "फोटो उदाहरण:", "ఫోటో ఉదాహరణలు:")}
+          {t("Photo Examples:", "\u092B\u094B\u091F\u094B \u0909\u0926\u093E\u0939\u0930\u0923:", "\u0C2B\u0C4B\u0C1F\u0C4B \u0C09\u0C26\u0C3E\u0C39\u0C30\u0C23\u0C32\u0C41:")}
         </p>
         <div className="grid grid-cols-3 gap-2">
           {[
             {
-              label: t("Healthy", "स्वस्थ", "ఆరోగ్యకరం"),
+              label: t("Healthy", "\u0938\u094D\u0935\u0938\u094D\u0925", "\u0C06\u0C30\u0C4B\u0C17\u0C4D\u0C2F\u0C15\u0C30\u0C02"),
               color: "bg-primary/15 border-primary/30",
               icon: "text-primary",
             },
             {
-              label: t("Diseased", "रोगग्रस्त", "వ్యాధిగ్రస్తం"),
+              label: t("Diseased", "\u0930\u094B\u0917\u0917\u094D\u0930\u0938\u094D\u0924", "\u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F\u0C17\u0C4D\u0C30\u0C38\u0C4D\u0C24\u0C02"),
               color: "bg-secondary/20 border-secondary/40",
               icon: "text-secondary-foreground",
             },
             {
-              label: t("Damaged", "क्षतिग्रस्त", "దెబ్బతిన్నది"),
+              label: t("Damaged", "\u0915\u094D\u0937\u0924\u093F\u0917\u094D\u0930\u0938\u094D\u0924", "\u0C26\u0C46\u0C2C\u0C4D\u0C2C\u0C24\u0C3F\u0C28\u0C4D\u0C28\u0C26\u0C3F"),
               color: "bg-destructive/10 border-destructive/30",
               icon: "text-destructive",
             },
@@ -322,11 +314,11 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
   const [messageIndex, setMessageIndex] = useState(0)
 
   const messages = [
-    t("Scanning crop image...", "फसल छवि स्कैन कर रहे हैं...", "పంట చిత్రాన్ని స్కాన్ చేస్తోంది..."),
-    t("Detecting disease patterns...", "रोग पैटर्न पहचान रहे हैं...", "వ్యాధి నమూనాలను గుర్తిస్తోంది..."),
-    t("Cross-referencing crop database...", "फसल डेटाबेस से मिलान...", "పంట డేటాబేస్‌తో సరిపోల్చుతోంది..."),
-    t("Calculating damage severity...", "क्षति गंभीरता गणना...", "నష్టం తీవ్రతను లెక్కిస్తోంది..."),
-    t("Generating report...", "रिपोर्ट बना रहे हैं...", "నివేదిక రూపొందిస్తోంది..."),
+    t("Scanning crop image...", "\u092B\u0938\u0932 \u091B\u0935\u093F \u0938\u094D\u0915\u0948\u0928 \u0915\u0930 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C2A\u0C02\u0C1F \u0C1A\u0C3F\u0C24\u0C4D\u0C30\u0C3E\u0C28\u0C4D\u0C28\u0C3F \u0C38\u0C4D\u0C15\u0C3E\u0C28\u0C4D \u0C1A\u0C47\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
+    t("Detecting disease patterns...", "\u0930\u094B\u0917 \u092A\u0948\u091F\u0930\u094D\u0928 \u092A\u0939\u091A\u093E\u0928 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F \u0C28\u0C2E\u0C42\u0C28\u0C3E\u0C32\u0C28\u0C41 \u0C17\u0C41\u0C30\u0C4D\u0C24\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
+    t("Cross-referencing crop database...", "\u092B\u0938\u0932 \u0921\u0947\u091F\u093E\u092C\u0947\u0938 \u0938\u0947 \u092E\u093F\u0932\u093E\u0928...", "\u0C2A\u0C02\u0C1F \u0C21\u0C47\u0C1F\u0C3E\u0C2C\u0C47\u0C38\u0C4D\u200C\u0C24\u0C4B \u0C38\u0C30\u0C3F\u0C2A\u0C4B\u0C32\u0C4D\u0C1A\u0C41\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
+    t("Calculating damage severity...", "\u0915\u094D\u0937\u0924\u093F \u0917\u0902\u092D\u0940\u0930\u0924\u093E \u0917\u0923\u0928\u093E...", "\u0C28\u0C37\u0C4D\u0C1F\u0C02 \u0C24\u0C40\u0C35\u0C4D\u0C30\u0C24\u0C28\u0C41 \u0C32\u0C46\u0C15\u0C4D\u0C15\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
+    t("Generating report...", "\u0930\u093F\u092A\u094B\u0930\u094D\u091F \u092C\u0928\u093E \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C28\u0C3F\u0C35\u0C47\u0C26\u0C3F\u0C15 \u0C30\u0C42\u0C2A\u0C4A\u0C02\u0C26\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
   ]
 
   useEffect(() => {
@@ -507,48 +499,26 @@ function ResultsScreen({
 
           {/* Confidence & Crop Affected */}
           <div className="mt-4 grid grid-cols-2 gap-4">
-            {/* Confidence Gauge */}
             <div className="flex flex-col items-center gap-1">
               <div className="relative size-24">
                 <svg className="-rotate-90 size-24" viewBox="0 0 100 100">
-                  <circle
-                    cx="50" cy="50" r="40" fill="none"
-                    stroke="var(--color-muted)" strokeWidth="8"
-                  />
-                  <circle
-                    cx="50" cy="50" r="40" fill="none"
-                    stroke="var(--color-primary)" strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={`${2 * Math.PI * 40}`}
-                    strokeDashoffset={`${2 * Math.PI * 40 * (1 - animatedConfidence / 100)}`}
-                    className="transition-all duration-1000 ease-out"
-                  />
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-muted)" strokeWidth="8" />
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-primary)" strokeWidth="8" strokeLinecap="round" strokeDasharray={`${2 * Math.PI * 40}`} strokeDashoffset={`${2 * Math.PI * 40 * (1 - animatedConfidence / 100)}`} className="transition-all duration-1000 ease-out" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-lg font-bold text-foreground">{animatedConfidence}%</span>
                 </div>
               </div>
               <span className="text-[10px] text-muted-foreground">
-                {t("Confidence", "विश्वसनीयता", "నమ్మకం")}
+                {t("Confidence", "\u0935\u093F\u0936\u094D\u0935\u0938\u0928\u0940\u092F\u0924\u093E", "\u0C28\u0C2E\u0C4D\u0C2E\u0C15\u0C02")}
               </span>
             </div>
 
-            {/* Crop Affected Ring */}
             <div className="flex flex-col items-center gap-1">
               <div className="relative size-24">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadialBarChart
-                    innerRadius="60%"
-                    outerRadius="100%"
-                    data={cropData}
-                    startAngle={90}
-                    endAngle={-270}
-                  >
-                    <RadialBar
-                      dataKey="value"
-                      cornerRadius={6}
-                      background={{ fill: "var(--color-muted)" }}
-                    />
+                  <RadialBarChart innerRadius="60%" outerRadius="100%" data={cropData} startAngle={90} endAngle={-270}>
+                    <RadialBar dataKey="value" cornerRadius={6} background={{ fill: "var(--color-muted)" }} />
                   </RadialBarChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -556,7 +526,7 @@ function ResultsScreen({
                 </div>
               </div>
               <span className="text-[10px] text-muted-foreground">
-                {t("Crop Affected", "फसल प्रभावित", "పంట ప్రభావితం")}
+                {t("Crop Affected", "\u092B\u0938\u0932 \u092A\u094D\u0930\u092D\u093E\u0935\u093F\u0924", "\u0C2A\u0C02\u0C1F \u0C2A\u0C4D\u0C30\u0C2D\u0C3E\u0C35\u0C3F\u0C24\u0C02")}
               </span>
             </div>
           </div>
@@ -569,7 +539,7 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <Microscope className="size-4 text-primary" />
-              {t("What is this disease?", "यह कौनसी बीमारी है?", "ఈ వ్యాధి ఏమిటి?")}
+              {t("What is this disease?", "\u092F\u0939 \u0915\u094C\u0928\u0938\u0940 \u092C\u0940\u092E\u093E\u0930\u0940 \u0939\u0948?", "\u0C08 \u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F \u0C0F\u0C2E\u0C3F\u0C1F\u0C3F?")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
@@ -581,7 +551,7 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <CloudSun className="size-4 text-secondary-foreground" />
-              {t("Why did this happen?", "ऐसा क्यों हुआ?", "ఇది ఎందుకు జరిగింది?")}
+              {t("Why did this happen?", "\u0910\u0938\u093E \u0915\u094D\u092F\u094B\u0902 \u0939\u0941\u0906?", "\u0C07\u0C26\u0C3F \u0C0E\u0C02\u0C26\u0C41\u0C15\u0C41 \u0C1C\u0C30\u0C3F\u0C17\u0C3F\u0C02\u0C26\u0C3F?")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
@@ -593,7 +563,7 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <Thermometer className="size-4 text-accent-foreground" />
-              {t("Weather conditions", "मौसम की स्थिति", "వాతావరణ పరిస్థితులు")}
+              {t("Weather conditions", "\u092E\u094C\u0938\u092E \u0915\u0940 \u0938\u094D\u0925\u093F\u0924\u093F", "\u0C35\u0C3E\u0C24\u0C3E\u0C35\u0C30\u0C23 \u0C2A\u0C30\u0C3F\u0C38\u0C4D\u0C25\u0C3F\u0C24\u0C41\u0C32\u0C41")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
@@ -605,26 +575,18 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <Leaf className="size-4 text-primary" />
-              {t("Affected parts of plant", "पौधे के प्रभावित भाग", "మొక్క ప్రభావిత భాగాలు")}
+              {t("Affected parts of plant", "\u092A\u094C\u0927\u0947 \u0915\u0947 \u092A\u094D\u0930\u092D\u093E\u0935\u093F\u0924 \u092D\u093E\u0917", "\u0C2E\u0C4A\u0C15\u0C4D\u0C15 \u0C2A\u0C4D\u0C30\u0C2D\u0C3E\u0C35\u0C3F\u0C24 \u0C2D\u0C3E\u0C17\u0C3E\u0C32\u0C41")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
-            {/* Simple Plant Diagram */}
             <div className="flex items-center justify-center gap-6 py-2">
               <svg viewBox="0 0 120 200" className="h-32 w-auto">
-                {/* Roots */}
                 <g opacity={result.affectedParts.includes("roots") ? 1 : 0.3}>
                   <path d="M60 170 Q50 190 35 195" stroke={result.affectedParts.includes("roots") ? "var(--color-destructive)" : "var(--color-muted-foreground)"} strokeWidth="2" fill="none" />
                   <path d="M60 170 Q70 190 85 195" stroke={result.affectedParts.includes("roots") ? "var(--color-destructive)" : "var(--color-muted-foreground)"} strokeWidth="2" fill="none" />
                   <path d="M60 170 Q60 190 60 198" stroke={result.affectedParts.includes("roots") ? "var(--color-destructive)" : "var(--color-muted-foreground)"} strokeWidth="2" fill="none" />
                 </g>
-                {/* Stem */}
-                <line
-                  x1="60" y1="80" x2="60" y2="170"
-                  stroke={result.affectedParts.includes("stems") || result.affectedParts.includes("nodes") ? "var(--color-destructive)" : "var(--color-primary)"}
-                  strokeWidth="4" strokeLinecap="round"
-                />
-                {/* Leaves */}
+                <line x1="60" y1="80" x2="60" y2="170" stroke={result.affectedParts.includes("stems") || result.affectedParts.includes("nodes") ? "var(--color-destructive)" : "var(--color-primary)"} strokeWidth="4" strokeLinecap="round" />
                 <g opacity={result.affectedParts.includes("leaves") ? 1 : 0.3}>
                   <ellipse cx="35" cy="60" rx="25" ry="12" fill={result.affectedParts.includes("leaves") ? "var(--color-destructive)" : "var(--color-primary)"} opacity="0.6" transform="rotate(-30 35 60)" />
                   <ellipse cx="85" cy="50" rx="25" ry="12" fill={result.affectedParts.includes("leaves") ? "var(--color-destructive)" : "var(--color-primary)"} opacity="0.6" transform="rotate(30 85 50)" />
@@ -635,13 +597,7 @@ function ResultsScreen({
               <div className="flex flex-col gap-1.5">
                 {["leaves", "stems", "nodes", "roots"].map((part) => (
                   <div key={part} className="flex items-center gap-2">
-                    <div
-                      className={`size-3 rounded-full ${
-                        result.affectedParts.includes(part)
-                          ? "bg-destructive"
-                          : "bg-muted"
-                      }`}
-                    />
+                    <div className={`size-3 rounded-full ${result.affectedParts.includes(part) ? "bg-destructive" : "bg-muted"}`} />
                     <span className={`text-xs capitalize ${result.affectedParts.includes(part) ? "font-semibold text-destructive" : "text-muted-foreground"}`}>
                       {part}
                     </span>
@@ -656,7 +612,7 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <ShoppingBag className="size-4 text-primary" />
-              {t("Recommended Treatment", "अनुशंसित उपचार", "సిఫార్సు చేసిన చికిత్స")}
+              {t("Recommended Treatment", "\u0905\u0928\u0941\u0936\u0902\u0938\u093F\u0924 \u0909\u092A\u091A\u093E\u0930", "\u0C38\u0C3F\u0C2B\u0C3E\u0C30\u0C4D\u0C38\u0C41 \u0C1A\u0C47\u0C38\u0C3F\u0C28 \u0C1A\u0C3F\u0C15\u0C3F\u0C24\u0C4D\u0C38")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
@@ -681,7 +637,7 @@ function ResultsScreen({
           <AccordionTrigger className="text-sm font-semibold">
             <span className="flex items-center gap-2">
               <RefreshCw className="size-4 text-accent-foreground" />
-              {t("Recovery Timeline", "रिकवरी समयसीमा", "రికవరీ టైమ్‌లైన్")}
+              {t("Recovery Timeline", "\u0930\u093F\u0915\u0935\u0930\u0940 \u0938\u092E\u092F\u0938\u0940\u092E\u093E", "\u0C30\u0C3F\u0C15\u0C35\u0C30\u0C40 \u0C1F\u0C48\u0C2E\u0C4D\u200C\u0C32\u0C48\u0C28\u0C4D")}
             </span>
           </AccordionTrigger>
           <AccordionContent>
@@ -698,234 +654,18 @@ function ResultsScreen({
           onClick={onGenerateReport}
         >
           <FileText className="size-5" />
-          {t("Generate Insurance Claim Report", "बीमा दावा रिपोर्ट बनाएं", "బీమా క్లెయిమ్ రిపోర్ట్ రూపొందించండి")}
+          {t("Generate Insurance Claim Report", "\u092C\u0940\u092E\u093E \u0926\u093E\u0935\u093E \u0930\u093F\u092A\u094B\u0930\u094D\u091F \u092C\u0928\u093E\u090F\u0902", "\u0C2C\u0C40\u0C2E\u0C3E \u0C15\u0C4D\u0C32\u0C46\u0C2F\u0C3F\u0C2E\u0C4D \u0C30\u0C3F\u0C2A\u0C4B\u0C30\u0C4D\u0C1F\u0C4D \u0C30\u0C42\u0C2A\u0C4A\u0C02\u0C26\u0C3F\u0C02\u0C1A\u0C02\u0C21\u0C3F")}
         </Button>
         <div className="grid grid-cols-2 gap-2">
-          <Button
-            size="lg"
-            variant="outline"
-            className="min-h-12 gap-2 text-sm"
-          >
+          <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
             <ShoppingBag className="size-4" />
-            {t("Buy Supplies", "आपूर्ति खरीदें", "సరఫరాలు కొనండి")}
+            {t("Buy Supplies", "\u0906\u092A\u0942\u0930\u094D\u0924\u093F \u0916\u0930\u0940\u0926\u0947\u0902", "\u0C38\u0C30\u0C2B\u0C30\u0C3E\u0C32\u0C41 \u0C15\u0C4A\u0C28\u0C02\u0C21\u0C3F")}
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="min-h-12 gap-2 text-sm"
-            onClick={onScanAnother}
-          >
+          <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm" onClick={onScanAnother}>
             <RefreshCw className="size-4" />
-            {t("Scan Another", "फिर स्कैन करें", "మళ్ళీ స్కాన్")}
+            {t("Scan Another", "\u092B\u093F\u0930 \u0938\u094D\u0915\u0948\u0928 \u0915\u0930\u0947\u0902", "\u0C2E\u0C33\u0C4D\u0C33\u0C40 \u0C38\u0C4D\u0C15\u0C3E\u0C28\u0C4D")}
           </Button>
         </div>
-      </div>
-    </div>
-  )
-}
-
-/* ================ SCREEN 4: Insurance Report ================ */
-interface ReportScreenProps {
-  result: DiseaseResult
-  onBack: () => void
-  onFileClaim?: () => void
-}
-
-function ReportScreen(reportProps: ReportScreenProps) {
-  const { result, onBack } = reportProps
-  const handleFileClaim = reportProps.onFileClaim
-  const { t } = useLanguage()
-  const reportId = `KS-2024-${Math.floor(100000 + Math.random() * 900000)}`
-  const now = new Date()
-
-  const expectedIncome = result.expectedYield * result.marketPrice
-  const actualIncome = result.estimatedActualYield * result.marketPrice
-  const estimatedLoss = expectedIncome - actualIncome
-  const minClaim = Math.round(estimatedLoss * 0.8)
-
-  return (
-    <div className="flex flex-col gap-4">
-      <button
-        onClick={onBack}
-        className="flex items-center gap-1 text-sm text-muted-foreground"
-      >
-        <ArrowLeft className="size-4" />
-        {t("Back to results", "परिणामों पर वापस", "ఫలితాలకు తిరిగి")}
-      </button>
-
-      {/* Report */}
-      <Card className="overflow-hidden border-primary/20">
-        <CardContent className="relative flex flex-col gap-5 p-5 md:p-8" style={{ fontFamily: "var(--font-libre), serif" }}>
-          {/* Subtle Watermark */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.03]">
-            <span className="text-[120px] font-bold text-foreground" style={{ transform: "rotate(-30deg)" }}>KisanSaathi</span>
-          </div>
-
-          {/* Report Header */}
-          <div className="flex flex-col items-center gap-2 border-b border-border pb-4 text-center">
-            <div className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-                <span className="text-sm font-bold text-primary-foreground">K</span>
-              </div>
-              <span className="text-lg font-bold text-foreground">KisanSaathi</span>
-            </div>
-            <h2 className="text-base font-bold text-foreground">
-              {t("Official Crop Loss & Disease Report", "आधिकारिक फसल हानि और रोग रिपोर्ट", "అధికారిక పంట నష్టం & వ్యాధి నివేదిక")}
-            </h2>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground">
-              <span>{t("Report ID", "रिपोर्ट आईडी", "రిపోర్ట్ ID")}: {reportId}</span>
-              <span>{now.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}</span>
-              <span>{now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</span>
-            </div>
-            <div className="mt-1 flex size-14 items-center justify-center rounded-lg border border-border bg-muted">
-              <QrCode className="size-8 text-muted-foreground" />
-            </div>
-          </div>
-
-          {/* Section 1: Farmer Details */}
-          <div>
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("1. Farmer Details", "1. किसान विवरण", "1. రైతు వివరాలు")}
-            </h3>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <div><span className="text-muted-foreground">Name:</span> <span className="font-medium text-foreground">{farmerProfile.name}</span></div>
-              <div><span className="text-muted-foreground">Phone:</span> <span className="font-medium text-foreground">{farmerProfile.phone}</span></div>
-              <div><span className="text-muted-foreground">Village:</span> <span className="font-medium text-foreground">{farmerProfile.village}</span></div>
-              <div><span className="text-muted-foreground">District:</span> <span className="font-medium text-foreground">{farmerProfile.district}, {farmerProfile.state}</span></div>
-              <div><span className="text-muted-foreground">Land Area:</span> <span className="font-medium text-foreground">{farmerProfile.landArea} acres</span></div>
-              <div><span className="text-muted-foreground">GPS:</span> <span className="font-medium text-foreground">17.3850° N, 78.4867° E</span></div>
-              <div className="col-span-2"><span className="text-muted-foreground">Policy No:</span> <span className="font-medium text-foreground">{farmerProfile.insurancePolicyNumber}</span></div>
-            </div>
-          </div>
-
-          {/* Section 2: AI Disease Analysis */}
-          <div>
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("2. AI Disease Analysis", "2. AI रोग विश्लेषण", "2. AI వ్యాధి విశ్లేషణ")}
-            </h3>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <div><span className="text-muted-foreground">Disease:</span> <span className="font-semibold text-foreground">{result.name}</span></div>
-              <div><span className="text-muted-foreground">Confidence:</span> <span className="font-semibold text-foreground">{result.confidence}%</span></div>
-              <div><span className="text-muted-foreground">Severity:</span> <span className="font-semibold text-foreground">{result.severity}</span></div>
-              <div><span className="text-muted-foreground">Crop Affected:</span> <span className="font-semibold text-foreground">{result.cropAffectedPct}%</span></div>
-            </div>
-            <div className="mt-2 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2">
-              <Shield className="size-4 text-primary" />
-              <span className="text-xs font-medium text-primary">
-                {t("Verified by KisanSaathi AI Engine v2.1", "KisanSaathi AI इंजन v2.1 द्वारा सत्यापित", "KisanSaathi AI ఇంజిన్ v2.1 ద్వారా ధృవీకరించబడింది")}
-              </span>
-            </div>
-          </div>
-
-          {/* Section 3: Weather Cross-Validation */}
-          <div>
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("3. Weather Cross-Validation", "3. मौसम क्रॉस-सत्यापन", "3. వాతావరణ క్రాస్-ధృవీకరణ")}
-            </h3>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="flex flex-col items-center rounded-lg bg-muted p-2">
-                <Droplets className="size-4 text-accent-foreground" />
-                <span className="mt-1 text-sm font-bold text-foreground">87mm</span>
-                <span className="text-[10px] text-muted-foreground">Rainfall (3d)</span>
-              </div>
-              <div className="flex flex-col items-center rounded-lg bg-muted p-2">
-                <CloudSun className="size-4 text-secondary-foreground" />
-                <span className="mt-1 text-sm font-bold text-foreground">89%</span>
-                <span className="text-[10px] text-muted-foreground">Humidity</span>
-              </div>
-              <div className="flex flex-col items-center rounded-lg bg-muted p-2">
-                <Thermometer className="size-4 text-destructive" />
-                <span className="mt-1 text-sm font-bold text-foreground">28°C</span>
-                <span className="text-[10px] text-muted-foreground">Temperature</span>
-              </div>
-            </div>
-            <div className="mt-2 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2">
-              <Shield className="size-4 text-primary" />
-              <span className="text-xs font-medium text-primary">
-                {t("Weather conditions consistent with disease outbreak", "मौसम की स्थिति रोग प्रकोप के अनुरूप", "వాతావరణ పరిస్థితులు వ్యాధి వ్యాప్తికి అనుగుణంగా")}
-              </span>
-            </div>
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              Source: India Meteorological Department + OpenWeatherMap
-            </p>
-          </div>
-
-          {/* Section 4: Financial Loss */}
-          <div>
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("4. Financial Loss Estimation", "4. वित्तीय हानि अनुमान", "4. ఆర్థిక నష్టం అంచనా")}
-            </h3>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <div><span className="text-muted-foreground">Expected Yield:</span> <span className="font-medium text-foreground">{result.expectedYield} quintals</span></div>
-              <div><span className="text-muted-foreground">Est. Actual Yield:</span> <span className="font-medium text-foreground">{result.estimatedActualYield} quintals</span></div>
-              <div><span className="text-muted-foreground">Market Price:</span> <span className="font-medium text-foreground">{"\u20B9"}{result.marketPrice.toLocaleString("en-IN")}/quintal</span></div>
-              <div><span className="text-muted-foreground">Expected Income:</span> <span className="font-medium text-foreground">{"\u20B9"}{expectedIncome.toLocaleString("en-IN")}</span></div>
-              <div><span className="text-muted-foreground">Est. Actual Income:</span> <span className="font-medium text-foreground">{"\u20B9"}{actualIncome.toLocaleString("en-IN")}</span></div>
-            </div>
-            <div className="mt-3 rounded-xl border-2 border-destructive/30 bg-destructive/10 p-3 text-center">
-              <p className="text-xs text-muted-foreground">{t("Estimated Loss", "अनुमानित हानि", "అంచనా నష్టం")}</p>
-              <p className="text-2xl font-bold text-destructive">{"\u20B9"}{estimatedLoss.toLocaleString("en-IN")}</p>
-            </div>
-            <div className="mt-2 rounded-lg bg-muted p-2 text-center text-xs text-muted-foreground">
-              {t("Recommended Claim Amount", "अनुशंसित दावा राशि", "సిఫార్సు క్లెయిమ్ మొత్తం")}:{" "}
-              <span className="font-bold text-foreground">{"\u20B9"}{minClaim.toLocaleString("en-IN")} – {"\u20B9"}{estimatedLoss.toLocaleString("en-IN")}</span>
-            </div>
-          </div>
-
-          {/* Section 5: Geo-tag */}
-          <div>
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("5. Geo-tag & Location Proof", "5. जियो-टैग और स्थान प्रमाण", "5. జియో-ట్యాగ్ & లొకేషన్ ప్రూఫ్")}
-            </h3>
-            <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
-              <MapPin className="size-5 text-primary" />
-              <div className="text-xs">
-                <p className="font-medium text-foreground">17.3850° N, 78.4867° E</p>
-                <p className="text-muted-foreground">
-                  {now.toLocaleString("en-IN")} | Device ID: ****a3f7
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Section 6: Declaration */}
-          <div className="border-t border-border pt-4">
-            <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
-              {t("6. Declaration", "6. घोषणा", "6. ప్రకటన")}
-            </h3>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {t(
-                "This report has been auto-generated by KisanSaathi AI system. All data has been cross-verified with satellite weather data and AI crop analysis. This report is valid for insurance claim submission.",
-                "यह रिपोर्ट KisanSaathi AI प्रणाली द्वारा स्वचालित रूप से तैयार की गई है। सभी डेटा को उपग्रह मौसम डेटा और AI फसल विश्लेषण के साथ क्रॉस-सत्यापित किया गया है।",
-                "ఈ నివేదిక KisanSaathi AI వ్యవస్థ ద్వారా స్వయంచాలకంగా రూపొందించబడింది. మొత్తం డేటా ఉపగ్రహ వాతావరణ డేటా మరియు AI పంట విశ్లేషణతో క్రాస్-వెరిఫై చేయబడింది."
-              )}
-            </p>
-            <div className="mt-3 flex items-center gap-2 border-t border-dashed border-border pt-3">
-              <div className="h-8 w-32 rounded border border-muted-foreground/30 bg-muted/50" />
-              <span className="text-[10px] text-muted-foreground">{t("Digital Signature", "डिजिटल हस्ताक्षर", "డిజిటల్ సంతకం")}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Action Buttons - Sticky */}
-      <div className="sticky bottom-20 grid grid-cols-2 gap-2 bg-background/95 py-3 backdrop-blur-sm md:grid-cols-4">
-        <Button size="lg" className="min-h-12 gap-2 bg-primary text-sm text-primary-foreground" onClick={handleFileClaim}>
-          <Send className="size-4" />
-          {t("Submit Claim", "दावा जमा करें", "క్లెయిమ్ సమర్పించు")}
-        </Button>
-        <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
-          <Download className="size-4" />
-          {t("PDF", "PDF", "PDF")}
-        </Button>
-        <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
-          <Share2 className="size-4" />
-          {t("WhatsApp", "WhatsApp", "WhatsApp")}
-        </Button>
-        <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
-          <Printer className="size-4" />
-          {t("Print", "प्रिंट", "ప్రింట్")}
-        </Button>
       </div>
     </div>
   )
