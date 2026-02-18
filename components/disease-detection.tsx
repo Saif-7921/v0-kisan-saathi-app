@@ -14,6 +14,9 @@ import {
   Leaf,
   CloudSun,
   Thermometer,
+  X,
+  ShoppingCart,
+  Plus,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -26,6 +29,7 @@ import {
 } from "@/components/ui/accordion"
 import { useLanguage } from "@/lib/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
+import { useToastContext } from "@/lib/toast-context"
 import { ReportScreen } from "@/components/report-screen"
 import { diseaseDatabase } from "@/lib/mock-data"
 import type { DiseaseResult } from "@/lib/mock-data"
@@ -420,8 +424,10 @@ function ResultsScreen({
   onScanAnother: () => void
 }) {
   const { t } = useLanguage()
+  const { showToast } = useToastContext()
   const [animatedConfidence, setAnimatedConfidence] = useState(0)
   const [animatedCrop, setAnimatedCrop] = useState(0)
+  const [showSuppliesModal, setShowSuppliesModal] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -674,7 +680,12 @@ function ResultsScreen({
           {t("Generate Insurance Claim Report", "\u092C\u0940\u092E\u093E \u0926\u093E\u0935\u093E \u0930\u093F\u092A\u094B\u0930\u094D\u091F \u092C\u0928\u093E\u090F\u0902", "\u0C2C\u0C40\u0C2E\u0C3E \u0C15\u0C4D\u0C32\u0C46\u0C2F\u0C3F\u0C2E\u0C4D \u0C30\u0C3F\u0C2A\u0C4B\u0C30\u0C4D\u0C1F\u0C4D \u0C30\u0C42\u0C2A\u0C4A\u0C02\u0C26\u0C3F\u0C02\u0C1A\u0C02\u0C21\u0C3F")}
         </Button>
         <div className="grid grid-cols-2 gap-2">
-          <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm">
+          <Button
+            size="lg"
+            variant="outline"
+            className="min-h-12 gap-2 text-sm"
+            onClick={() => setShowSuppliesModal(true)}
+          >
             <ShoppingBag className="size-4" />
             {t("Buy Supplies", "\u0906\u092A\u0942\u0930\u094D\u0924\u093F \u0916\u0930\u0940\u0926\u0947\u0902", "\u0C38\u0C30\u0C2B\u0C30\u0C3E\u0C32\u0C41 \u0C15\u0C4A\u0C28\u0C02\u0C21\u0C3F")}
           </Button>
@@ -689,6 +700,84 @@ function ResultsScreen({
           </Button>
         </div>
       </div>
+
+      {/* Buy Treatment Supplies Modal */}
+      {showSuppliesModal && (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-foreground/50 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowSuppliesModal(false) }}
+        >
+          <div className="max-h-[80vh] w-full max-w-sm animate-in zoom-in-95 overflow-y-auto rounded-2xl bg-card p-5 shadow-xl duration-200">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-serif text-lg font-bold">
+                {t("Treatment Supplies", "\u0909\u092A\u091A\u093E\u0930 \u0938\u093E\u092E\u0917\u094D\u0930\u0940", "\u0C1A\u0C3F\u0C15\u0C3F\u0C24\u0C4D\u0C38 \u0C38\u0C30\u0C2B\u0C30\u0C3E\u0C32\u0C41")}
+              </h3>
+              <button onClick={() => setShowSuppliesModal(false)} className="rounded-lg p-1 hover:bg-muted">
+                <X className="size-5 text-muted-foreground" />
+              </button>
+            </div>
+            <p className="mb-3 text-xs text-muted-foreground">
+              {t("Recommended for", "\u0905\u0928\u0941\u0936\u0902\u0938\u093F\u0924", "\u0C38\u0C3F\u0C2B\u0C3E\u0C30\u0C4D\u0C38\u0C41")} {result.name}
+            </p>
+            <div className="flex flex-col gap-3">
+              {result.treatment.map((med, i) => (
+                <Card key={i}>
+                  <CardContent className="flex items-center gap-3 p-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/15">
+                      <ShoppingBag className="size-5 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-foreground">{med.name}</p>
+                      <p className="text-[10px] text-muted-foreground">{med.dosage}</p>
+                      <p className="text-sm font-bold text-primary">{"\u20B9"}{med.cost}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="gap-1 bg-primary text-primary-foreground"
+                      onClick={() => {
+                        showToast(`${med.name} added to cart!`)
+                      }}
+                    >
+                      <Plus className="size-3" />
+                      {t("Add", "\u091C\u094B\u0921\u093C\u0947\u0902", "\u0C1A\u0C47\u0C30\u0C4D\u0C1A\u0C41")}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+              {/* Additional Products */}
+              {[
+                { name: "Organic Neem Cake (5kg)", price: 320, desc: "Natural soil amendment" },
+                { name: "Bio-Potash Fertilizer (1L)", price: 280, desc: "Improves crop immunity" },
+                { name: "Garden Spray Pump (2L)", price: 450, desc: "Manual pressure sprayer" },
+              ].map((item, i) => (
+                <Card key={`extra-${i}`}>
+                  <CardContent className="flex items-center gap-3 p-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary/20">
+                      <ShoppingCart className="size-5 text-secondary-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-foreground">{item.name}</p>
+                      <p className="text-[10px] text-muted-foreground">{item.desc}</p>
+                      <p className="text-sm font-bold text-primary">{"\u20B9"}{item.price}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1"
+                      onClick={() => {
+                        showToast(`${item.name} added to cart!`)
+                      }}
+                    >
+                      <Plus className="size-3" />
+                      {t("Add", "\u091C\u094B\u0921\u093C\u0947\u0902", "\u0C1A\u0C47\u0C30\u0C4D\u0C1A\u0C41")}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { LanguageProvider } from "@/lib/language-context"
+import { ToastProvider } from "@/lib/toast-context"
 import { BottomNav, type TabId } from "@/components/bottom-nav"
 import { OfflineBanner } from "@/components/offline-banner"
 import { HomeDashboard } from "@/components/home-dashboard"
@@ -10,6 +11,7 @@ import { EquipmentMarketplace } from "@/components/equipment-marketplace"
 import { ClaimsDashboard } from "@/components/claims-dashboard"
 import { ProfilePage } from "@/components/profile-page"
 import { DiseaseDetection } from "@/components/disease-detection"
+import { ToastDisplay } from "@/components/toast-display"
 
 export default function KisanSaathiApp() {
   const [mounted, setMounted] = useState(false)
@@ -53,36 +55,39 @@ export default function KisanSaathiApp() {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen w-full bg-background">
-        <OfflineBanner />
-        {/* App Header Bar */}
-        <header className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-border bg-card px-4 py-3 md:px-8 lg:px-12">
-          <div className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">K</span>
+      <ToastProvider>
+        <div className="min-h-screen w-full bg-background">
+          <OfflineBanner />
+          {/* App Header Bar */}
+          <header className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-border bg-card px-4 py-3 md:px-8 lg:px-12">
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
+                <span className="text-sm font-bold text-primary-foreground">K</span>
+              </div>
+              <div>
+                <h1 className="text-sm font-bold leading-none text-foreground">
+                  KisanSaathi
+                </h1>
+                <p className="text-[10px] leading-none text-muted-foreground">
+                  {"किसान साथी"}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-sm font-bold leading-none text-foreground">
-                KisanSaathi
-              </h1>
-              <p className="text-[10px] leading-none text-muted-foreground">
-                {"किसान साथी"}
-              </p>
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-full bg-primary/15">
+                <span className="text-xs font-bold text-primary">F</span>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-full bg-primary/15">
-              <span className="text-xs font-bold text-primary">F</span>
-            </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Main Content */}
-        <main className="w-full px-4 pb-24 pt-4 md:px-8 lg:px-12">{renderTab()}</main>
+          {/* Main Content */}
+          <main className="w-full px-4 pb-24 pt-4 md:px-8 lg:px-12">{renderTab()}</main>
 
-        {/* Bottom Navigation */}
-        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
-      </div>
+          {/* Bottom Navigation */}
+          <BottomNav activeTab={activeTab} onTabChange={(tab) => { setShowDisease(false); setActiveTab(tab) }} />
+          <ToastDisplay />
+        </div>
+      </ToastProvider>
     </LanguageProvider>
   )
 }

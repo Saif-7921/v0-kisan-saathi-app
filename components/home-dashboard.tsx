@@ -101,72 +101,114 @@ export function HomeDashboard({ onNavigate, onDetectDisease }: HomeDashboardProp
         <h2 className="mb-3 font-serif text-lg font-bold">
           {t("Quick Actions", "त्वरित कार्य", "త్వరిత చర్యలు")}
         </h2>
-        {/* Disease Detection - prominent card */}
-        <button
-          onClick={onDetectDisease}
-          className="flex w-full items-center gap-4 rounded-xl bg-primary/10 p-4 text-left ring-2 ring-primary/30 transition-transform active:scale-[0.98]"
-        >
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
-            <Microscope className="size-6 text-primary" />
-          </div>
-          <div className="flex-1">
-            <span className="text-base font-bold text-primary">
-              {t("Detect Crop Disease", "फसल रोग पहचानें", "పంట వ్యాధి గుర్తించండి")}
-            </span>
-            <p className="text-xs text-muted-foreground">
-              {t("AI-powered instant diagnosis & claim", "AI तत्काल निदान और दावा", "AI తక్షణ నిర్ధారణ & క్లెయిమ్")}
-            </p>
-          </div>
-          <ChevronRight className="size-5 text-primary" />
-        </button>
-
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4">
+          {/* Report Crop Loss */}
           <button
             onClick={() => onNavigate("claim")}
-            className="flex min-h-[80px] flex-col items-start justify-center gap-1.5 rounded-xl bg-destructive/10 p-4 text-left transition-transform active:scale-[0.98]"
+            className="flex min-h-[100px] flex-col items-start justify-center gap-2 rounded-xl bg-destructive/10 p-5 text-left transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           >
-            <div className="flex size-9 items-center justify-center rounded-lg bg-destructive/20">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-destructive/20">
               <AlertTriangle className="size-5 text-destructive" />
             </div>
             <span className="text-sm font-bold text-destructive">
               {t("Report Crop Loss", "फसल नुकसान रिपोर्ट", "పంట నష్టం నివేదిక")}
             </span>
+            <span className="text-[10px] text-muted-foreground">
+              {t("File insurance claim", "बीमा दावा दर्ज करें", "బీమా క్లెయిమ్ దాఖలు")}
+            </span>
           </button>
 
+          {/* Rent Equipment */}
           <button
             onClick={() => onNavigate("equipment")}
-            className="flex min-h-[80px] flex-col items-start justify-center gap-1.5 rounded-xl bg-primary/10 p-4 text-left transition-transform active:scale-[0.98]"
+            className="flex min-h-[100px] flex-col items-start justify-center gap-2 rounded-xl bg-primary/10 p-5 text-left transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           >
-            <div className="flex size-9 items-center justify-center rounded-lg bg-primary/20">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/20">
               <Tractor className="size-5 text-primary" />
             </div>
             <span className="text-sm font-bold text-primary">
               {t("Rent Equipment", "उपकरण किराये", "పరికరం అద్దె")}
             </span>
+            <span className="text-[10px] text-muted-foreground">
+              {t("Find nearby machinery", "नजदीकी मशीनरी खोजें", "సమీపంలోని యంత్రాలు")}
+            </span>
           </button>
 
+          {/* List My Equipment */}
           <button
             onClick={() => onNavigate("equipment")}
-            className="flex min-h-[80px] flex-col items-start justify-center gap-1.5 rounded-xl bg-accent/15 p-4 text-left transition-transform active:scale-[0.98]"
+            className="flex min-h-[100px] flex-col items-start justify-center gap-2 rounded-xl bg-accent/15 p-5 text-left transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           >
-            <div className="flex size-9 items-center justify-center rounded-lg bg-accent/20">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-accent/20">
               <FileText className="size-5 text-accent-foreground" />
             </div>
             <span className="text-sm font-bold text-accent-foreground">
               {t("List My Equipment", "उपकरण सूचीबद्ध करें", "పరికరం జాబితా")}
             </span>
+            <span className="text-[10px] text-muted-foreground">
+              {t("Earn by renting out", "किराये पर देकर कमाएं", "అద్దెకు ఇచ్చి సంపాదించండి")}
+            </span>
           </button>
 
+          {/* Track My Claim */}
           <button
             onClick={() => onNavigate("dashboard")}
-            className="flex min-h-[80px] flex-col items-start justify-center gap-1.5 rounded-xl bg-secondary/30 p-4 text-left transition-transform active:scale-[0.98]"
+            className="flex min-h-[100px] flex-col items-start justify-center gap-2 rounded-xl bg-secondary/30 p-5 text-left transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           >
-            <div className="flex size-9 items-center justify-center rounded-lg bg-secondary/40">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-secondary/40">
               <BarChart3 className="size-5 text-secondary-foreground" />
             </div>
             <span className="text-sm font-bold text-secondary-foreground">
               {t("Track My Claim", "दावा ट्रैक करें", "క్లెయిమ్ ట్రాక్")}
             </span>
+            <span className="text-[10px] text-muted-foreground">
+              {t("View claim status", "दावा स्थिति देखें", "క్లెయిమ్ స్థితి చూడండి")}
+            </span>
+          </button>
+
+          {/* Detect Crop Disease - Full width premium card */}
+          <button
+            onClick={onDetectDisease}
+            className="relative col-span-2 min-h-[120px] overflow-hidden rounded-xl border-2 border-[rgba(245,166,35,0.4)] text-left transition-all hover:scale-[1.01] hover:shadow-lg active:scale-[0.99]"
+            style={{ background: "linear-gradient(135deg, #1a472a 0%, #2d6a4f 50%, #40916c 100%)" }}
+          >
+            {/* Animated particle dots */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute left-[10%] top-[20%] size-1.5 animate-pulse rounded-full bg-[rgba(255,255,255,0.2)]" />
+              <div className="absolute left-[30%] top-[60%] size-1 animate-pulse rounded-full bg-[rgba(255,255,255,0.15)]" style={{ animationDelay: "0.5s" }} />
+              <div className="absolute left-[50%] top-[30%] size-1.5 animate-pulse rounded-full bg-[rgba(255,255,255,0.2)]" style={{ animationDelay: "1s" }} />
+              <div className="absolute left-[70%] top-[70%] size-1 animate-pulse rounded-full bg-[rgba(255,255,255,0.1)]" style={{ animationDelay: "1.5s" }} />
+              <div className="absolute left-[85%] top-[15%] size-1.5 animate-pulse rounded-full bg-[rgba(255,255,255,0.15)]" style={{ animationDelay: "0.7s" }} />
+            </div>
+            <div className="relative flex items-center gap-4 p-5">
+              <div className="flex-1">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="text-base font-bold text-[#ffffff]">
+                    {t("Detect Crop Disease", "फसल रोग पहचानें", "పంట వ్యాధి గుర్తించండి")}
+                  </span>
+                  <span className="text-xs text-[rgba(255,255,255,0.7)]">AI Powered</span>
+                </div>
+                <p className="mb-3 text-xs text-[rgba(255,255,255,0.7)]">
+                  {t(
+                    "Upload crop photo \u2192 Get instant AI diagnosis + Insurance Report",
+                    "फसल फोटो अपलोड करें \u2192 तत्काल AI निदान + बीमा रिपोर्ट पाएं",
+                    "పంట ఫోటో అప్లోడ్ \u2192 తక్షణ AI నిర్ధారణ + బీమా నివేదిక"
+                  )}
+                </p>
+                <span
+                  className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold text-[#1a472a]"
+                  style={{ backgroundColor: "#F5A623" }}
+                >
+                  {t("Try Now", "अभी आजमाएं", "ఇప్పుడు ప్రయత్నించండి")} {"\u2192"}
+                </span>
+              </div>
+              {/* Pulsing microscope icon */}
+              <div className="relative flex size-16 shrink-0 items-center justify-center">
+                <div className="absolute inset-0 animate-ping rounded-full bg-[rgba(64,145,108,0.3)]" style={{ animationDuration: "2s" }} />
+                <div className="absolute inset-1 animate-pulse rounded-full bg-[rgba(64,145,108,0.2)]" style={{ animationDuration: "1.5s" }} />
+                <Microscope className="relative size-8 text-[#F5A623]" />
+              </div>
+            </div>
           </button>
         </div>
       </div>
