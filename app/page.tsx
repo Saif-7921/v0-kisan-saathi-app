@@ -1,0 +1,65 @@
+"use client"
+
+import { useState } from "react"
+import { LanguageProvider } from "@/lib/language-context"
+import { BottomNav, type TabId } from "@/components/bottom-nav"
+import { OfflineBanner } from "@/components/offline-banner"
+import { HomeDashboard } from "@/components/home-dashboard"
+import { CropLossClaim } from "@/components/crop-loss-claim"
+import { EquipmentMarketplace } from "@/components/equipment-marketplace"
+import { ClaimsDashboard } from "@/components/claims-dashboard"
+import { ProfilePage } from "@/components/profile-page"
+
+export default function KisanSaathiApp() {
+  const [activeTab, setActiveTab] = useState<TabId>("home")
+
+  const renderTab = () => {
+    switch (activeTab) {
+      case "home":
+        return <HomeDashboard onNavigate={setActiveTab} />
+      case "claim":
+        return <CropLossClaim />
+      case "equipment":
+        return <EquipmentMarketplace />
+      case "dashboard":
+        return <ClaimsDashboard />
+      case "profile":
+        return <ProfilePage />
+    }
+  }
+
+  return (
+    <LanguageProvider>
+      <div className="mx-auto min-h-screen max-w-lg bg-background">
+        <OfflineBanner />
+        {/* App Header Bar */}
+        <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-card px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
+              <span className="text-sm font-bold text-primary-foreground">K</span>
+            </div>
+            <div>
+              <h1 className="text-sm font-bold leading-none text-foreground">
+                KisanSaathi
+              </h1>
+              <p className="text-[10px] leading-none text-muted-foreground">
+                {"किसान साथी"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-full bg-primary/15">
+              <span className="text-xs font-bold text-primary">RK</span>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="px-4 pb-20 pt-4">{renderTab()}</main>
+
+        {/* Bottom Navigation */}
+        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
+    </LanguageProvider>
+  )
+}
