@@ -725,12 +725,15 @@ function ResultsScreen({
 }
 
 /* ================ SCREEN 4: Insurance Report ================ */
-function ReportScreen(props: {
+function ReportScreen({
+  result,
+  onBack,
+  onFileClaim,
+}: {
   result: DiseaseResult
   onBack: () => void
   onFileClaim?: () => void
 }) {
-  const { result, onBack, onFileClaim } = props
   const { t } = useLanguage()
   const reportId = `KS-2024-${Math.floor(100000 + Math.random() * 900000)}`
   const now = new Date()
