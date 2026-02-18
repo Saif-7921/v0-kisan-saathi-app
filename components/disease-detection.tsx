@@ -348,7 +348,6 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
           className="aspect-video w-full object-cover"
           crossOrigin="anonymous"
         />
-        {/* Scanning Line */}
         <div
           className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"
           style={{
@@ -356,7 +355,6 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
             top: `${(progress % 100)}%`,
           }}
         />
-        {/* Pulsing Border */}
         <div
           className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-primary"
           style={{ animation: "pulseRing 1.5s ease-in-out infinite" }}
@@ -367,20 +365,12 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
       <div className="relative flex size-28 items-center justify-center">
         <svg className="size-28 -rotate-90" viewBox="0 0 100 100">
           <circle
-            cx="50"
-            cy="50"
-            r="42"
-            fill="none"
-            stroke="var(--color-muted)"
-            strokeWidth="6"
+            cx="50" cy="50" r="42" fill="none"
+            stroke="var(--color-muted)" strokeWidth="6"
           />
           <circle
-            cx="50"
-            cy="50"
-            r="42"
-            fill="none"
-            stroke="var(--color-primary)"
-            strokeWidth="6"
+            cx="50" cy="50" r="42" fill="none"
+            stroke="var(--color-primary)" strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray={`${2 * Math.PI * 42}`}
             strokeDashoffset={`${2 * Math.PI * 42 * (1 - progress / 100)}`}
@@ -503,7 +493,14 @@ function ResultsScreen({
               <div className="relative size-24">
                 <svg className="-rotate-90 size-24" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-muted)" strokeWidth="8" />
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-primary)" strokeWidth="8" strokeLinecap="round" strokeDasharray={`${2 * Math.PI * 40}`} strokeDashoffset={`${2 * Math.PI * 40 * (1 - animatedConfidence / 100)}`} className="transition-all duration-1000 ease-out" />
+                  <circle
+                    cx="50" cy="50" r="40" fill="none"
+                    stroke="var(--color-primary)" strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 40}`}
+                    strokeDashoffset={`${2 * Math.PI * 40 * (1 - animatedConfidence / 100)}`}
+                    className="transition-all duration-1000 ease-out"
+                  />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-lg font-bold text-foreground">{animatedConfidence}%</span>
@@ -517,8 +514,18 @@ function ResultsScreen({
             <div className="flex flex-col items-center gap-1">
               <div className="relative size-24">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadialBarChart innerRadius="60%" outerRadius="100%" data={cropData} startAngle={90} endAngle={-270}>
-                    <RadialBar dataKey="value" cornerRadius={6} background={{ fill: "var(--color-muted)" }} />
+                  <RadialBarChart
+                    innerRadius="60%"
+                    outerRadius="100%"
+                    data={cropData}
+                    startAngle={90}
+                    endAngle={-270}
+                  >
+                    <RadialBar
+                      dataKey="value"
+                      cornerRadius={6}
+                      background={{ fill: "var(--color-muted)" }}
+                    />
                   </RadialBarChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -586,7 +593,11 @@ function ResultsScreen({
                   <path d="M60 170 Q70 190 85 195" stroke={result.affectedParts.includes("roots") ? "var(--color-destructive)" : "var(--color-muted-foreground)"} strokeWidth="2" fill="none" />
                   <path d="M60 170 Q60 190 60 198" stroke={result.affectedParts.includes("roots") ? "var(--color-destructive)" : "var(--color-muted-foreground)"} strokeWidth="2" fill="none" />
                 </g>
-                <line x1="60" y1="80" x2="60" y2="170" stroke={result.affectedParts.includes("stems") || result.affectedParts.includes("nodes") ? "var(--color-destructive)" : "var(--color-primary)"} strokeWidth="4" strokeLinecap="round" />
+                <line
+                  x1="60" y1="80" x2="60" y2="170"
+                  stroke={result.affectedParts.includes("stems") || result.affectedParts.includes("nodes") ? "var(--color-destructive)" : "var(--color-primary)"}
+                  strokeWidth="4" strokeLinecap="round"
+                />
                 <g opacity={result.affectedParts.includes("leaves") ? 1 : 0.3}>
                   <ellipse cx="35" cy="60" rx="25" ry="12" fill={result.affectedParts.includes("leaves") ? "var(--color-destructive)" : "var(--color-primary)"} opacity="0.6" transform="rotate(-30 35 60)" />
                   <ellipse cx="85" cy="50" rx="25" ry="12" fill={result.affectedParts.includes("leaves") ? "var(--color-destructive)" : "var(--color-primary)"} opacity="0.6" transform="rotate(30 85 50)" />
@@ -597,7 +608,13 @@ function ResultsScreen({
               <div className="flex flex-col gap-1.5">
                 {["leaves", "stems", "nodes", "roots"].map((part) => (
                   <div key={part} className="flex items-center gap-2">
-                    <div className={`size-3 rounded-full ${result.affectedParts.includes(part) ? "bg-destructive" : "bg-muted"}`} />
+                    <div
+                      className={`size-3 rounded-full ${
+                        result.affectedParts.includes(part)
+                          ? "bg-destructive"
+                          : "bg-muted"
+                      }`}
+                    />
                     <span className={`text-xs capitalize ${result.affectedParts.includes(part) ? "font-semibold text-destructive" : "text-muted-foreground"}`}>
                       {part}
                     </span>
@@ -661,7 +678,12 @@ function ResultsScreen({
             <ShoppingBag className="size-4" />
             {t("Buy Supplies", "\u0906\u092A\u0942\u0930\u094D\u0924\u093F \u0916\u0930\u0940\u0926\u0947\u0902", "\u0C38\u0C30\u0C2B\u0C30\u0C3E\u0C32\u0C41 \u0C15\u0C4A\u0C28\u0C02\u0C21\u0C3F")}
           </Button>
-          <Button size="lg" variant="outline" className="min-h-12 gap-2 text-sm" onClick={onScanAnother}>
+          <Button
+            size="lg"
+            variant="outline"
+            className="min-h-12 gap-2 text-sm"
+            onClick={onScanAnother}
+          >
             <RefreshCw className="size-4" />
             {t("Scan Another", "\u092B\u093F\u0930 \u0938\u094D\u0915\u0948\u0928 \u0915\u0930\u0947\u0902", "\u0C2E\u0C33\u0C4D\u0C33\u0C40 \u0C38\u0C4D\u0C15\u0C3E\u0C28\u0C4D")}
           </Button>
