@@ -1,3 +1,5 @@
+"use client"
+
 import dynamic from "next/dynamic"
 
 const KisanSaathiApp = dynamic(() => import("@/components/kisan-saathi-app"), {
