@@ -44,19 +44,24 @@ export function ClaimStep3AIAnalysis({ claimData, updateClaimData }: ClaimStep3P
           clearInterval(interval)
           setAnalyzing(false)
           setAnalysisComplete(true)
-          updateClaimData({
-            aiScore: 87,
-            damagePct: 60,
-            severity: "High",
-            images: ["img1", "img2", "img3", "img4", "img5", "img6"],
-          })
           return 100
         }
         return p + 2
       })
     }, 50)
     return () => clearInterval(interval)
-  }, [analyzing, updateClaimData])
+  }, [analyzing])
+
+  useEffect(() => {
+    if (analysisComplete && claimData.aiScore === 0) {
+      updateClaimData({
+        aiScore: 87,
+        damagePct: 60,
+        severity: "High",
+        images: ["img1", "img2", "img3", "img4", "img5", "img6"],
+      })
+    }
+  }, [analysisComplete, claimData.aiScore, updateClaimData])
 
   const severityColor = {
     Low: "bg-accent/20 text-accent-foreground",
@@ -177,7 +182,7 @@ export function ClaimStep3AIAnalysis({ claimData, updateClaimData }: ClaimStep3P
               {/* AI Score */}
               <div className="rounded-lg bg-muted p-3">
                 <p className="text-[10px] text-muted-foreground">
-                  {t("AI Verification Score", "AI सत्यापन स्कोर", "AI ధృవీకరణ స్కోర్")}
+                  {t("AI Verification Score", "AI सत्यापन स्कोर", "AI ధృవీకరణ స్��ోర్")}
                 </p>
                 <div className="flex items-center gap-1">
                   <ShieldCheck className="size-4 text-primary" />

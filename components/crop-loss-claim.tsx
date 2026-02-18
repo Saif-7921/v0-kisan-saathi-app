@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { StepProgressBar } from "@/components/step-progress-bar"
@@ -37,9 +37,9 @@ export function CropLossClaim() {
   })
   const { t } = useLanguage()
 
-  const updateClaimData = (data: Partial<typeof claimData>) => {
+  const updateClaimData = useCallback((data: Partial<typeof claimData>) => {
     setClaimData((prev) => ({ ...prev, ...data }))
-  }
+  }, [])
 
   const renderStep = () => {
     switch (currentStep) {

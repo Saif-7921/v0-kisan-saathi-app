@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { DM_Sans, Mukta } from "next/font/google"
+import { DM_Sans, Mukta, Libre_Baskerville } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 

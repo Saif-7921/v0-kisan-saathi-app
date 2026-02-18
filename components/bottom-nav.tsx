@@ -24,11 +24,11 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card"
+      className="fixed inset-x-0 bottom-0 z-50 w-full border-t border-border bg-card"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="mx-auto flex max-w-lg items-center justify-around">
+      <div className="flex w-full items-center justify-around">
         {navItems.map((item) => {
           const isActive = activeTab === item.id
           return (

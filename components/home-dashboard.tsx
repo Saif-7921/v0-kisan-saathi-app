@@ -15,6 +15,7 @@ import {
   Users,
   Clock,
   IndianRupee,
+  Microscope,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -31,9 +32,10 @@ import type { TabId } from "@/components/bottom-nav"
 
 interface HomeDashboardProps {
   onNavigate: (tab: TabId) => void
+  onDetectDisease?: () => void
 }
 
-export function HomeDashboard({ onNavigate }: HomeDashboardProps) {
+export function HomeDashboard({ onNavigate, onDetectDisease }: HomeDashboardProps) {
   const { t } = useLanguage()
 
   return (
@@ -41,12 +43,12 @@ export function HomeDashboard({ onNavigate }: HomeDashboardProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
-            {t("Welcome back", "वापस स्वागत है", "తిరిగి స్వాగతం")}
-          </p>
-          <h1 className="font-serif text-2xl font-bold text-foreground">
-            {farmerProfile.name}
+          <h1 className="font-serif font-bold text-foreground" style={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)" }}>
+            {t("Hello Farmers \uD83C\uDF3E", "नमस्ते किसान \uD83C\uDF3E", "హలో రైతులు \uD83C\uDF3E")}
           </h1>
+          <p className="font-light text-muted-foreground" style={{ fontSize: "clamp(0.8rem, 2vw, 1rem)" }}>
+            {t("Your smart farming companion", "आपका स्मार्ट खेती साथी", "మీ స్మార్ట్ వ్యవసాయ సహచరుడు")}
+          </p>
           <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="size-3" />
             <span>
@@ -99,7 +101,26 @@ export function HomeDashboard({ onNavigate }: HomeDashboardProps) {
         <h2 className="mb-3 font-serif text-lg font-bold">
           {t("Quick Actions", "त्वरित कार्य", "త్వరిత చర్యలు")}
         </h2>
-        <div className="grid grid-cols-2 gap-3">
+        {/* Disease Detection - prominent card */}
+        <button
+          onClick={onDetectDisease}
+          className="flex w-full items-center gap-4 rounded-xl bg-primary/10 p-4 text-left ring-2 ring-primary/30 transition-transform active:scale-[0.98]"
+        >
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
+            <Microscope className="size-6 text-primary" />
+          </div>
+          <div className="flex-1">
+            <span className="text-base font-bold text-primary">
+              {t("Detect Crop Disease", "फसल रोग पहचानें", "పంట వ్యాధి గుర్తించండి")}
+            </span>
+            <p className="text-xs text-muted-foreground">
+              {t("AI-powered instant diagnosis & claim", "AI तत्काल निदान और दावा", "AI తక్షణ నిర్ధారణ & క్లెయిమ్")}
+            </p>
+          </div>
+          <ChevronRight className="size-5 text-primary" />
+        </button>
+
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <button
             onClick={() => onNavigate("claim")}
             className="flex min-h-[80px] flex-col items-start justify-center gap-1.5 rounded-xl bg-destructive/10 p-4 text-left transition-transform active:scale-[0.98]"
@@ -156,7 +177,7 @@ export function HomeDashboard({ onNavigate }: HomeDashboardProps) {
           <h3 className="mb-3 font-serif text-sm font-bold">
             {t("Platform Transparency", "प्लेटफ़ॉर्म पारदर्शिता", "ప్లాట్‌ఫారమ్ పారదర్శకత")}
           </h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <div className="flex items-center gap-2.5">
               <div className="flex size-8 items-center justify-center rounded-lg bg-primary/15">
                 <FileText className="size-4 text-primary" />

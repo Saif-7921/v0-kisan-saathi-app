@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { IndianRupee, TrendingDown, Wheat } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -47,8 +47,12 @@ export function ClaimStep5LossCalculator({ claimData, updateClaimData }: ClaimSt
   const compensationLow = Math.round(loss * 0.85)
   const compensationHigh = loss
 
+  const prevLossRef = useRef(loss)
   useEffect(() => {
-    updateClaimData({ estimatedLoss: loss })
+    if (prevLossRef.current !== loss) {
+      prevLossRef.current = loss
+      updateClaimData({ estimatedLoss: loss })
+    }
   }, [loss, updateClaimData])
 
   return (

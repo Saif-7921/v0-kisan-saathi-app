@@ -23,17 +23,23 @@ interface ClaimStep4Props {
   updateClaimData: (data: Partial<{ weatherVerified: boolean }>) => void
 }
 
-export function ClaimStep4WeatherValidation({ updateClaimData }: ClaimStep4Props) {
+export function ClaimStep4WeatherValidation({ claimData, updateClaimData }: ClaimStep4Props) {
   const { t } = useLanguage()
-  const [verified, setVerified] = useState(false)
+  const [verified, setVerified] = useState(claimData.weatherVerified)
 
   useEffect(() => {
+    if (verified) return
     const timer = setTimeout(() => {
       setVerified(true)
-      updateClaimData({ weatherVerified: true })
     }, 1500)
     return () => clearTimeout(timer)
-  }, [updateClaimData])
+  }, [verified])
+
+  useEffect(() => {
+    if (verified && !claimData.weatherVerified) {
+      updateClaimData({ weatherVerified: true })
+    }
+  }, [verified, claimData.weatherVerified, updateClaimData])
 
   return (
     <div className="flex flex-col gap-4">

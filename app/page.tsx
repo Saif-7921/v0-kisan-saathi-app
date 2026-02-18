@@ -30,10 +30,10 @@ export default function KisanSaathiApp() {
 
   return (
     <LanguageProvider>
-      <div className="mx-auto min-h-screen max-w-lg bg-background">
+      <div className="min-h-screen w-full bg-background">
         <OfflineBanner />
         {/* App Header Bar */}
-        <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-card px-4 py-3">
+        <header className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-border bg-card px-4 py-3 md:px-8 lg:px-12">
           <div className="flex items-center gap-2">
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
               <span className="text-sm font-bold text-primary-foreground">K</span>
@@ -49,13 +49,13 @@ export default function KisanSaathiApp() {
           </div>
           <div className="flex items-center gap-2">
             <div className="flex size-8 items-center justify-center rounded-full bg-primary/15">
-              <span className="text-xs font-bold text-primary">RK</span>
+              <span className="text-xs font-bold text-primary">F</span>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="px-4 pb-20 pt-4">{renderTab()}</main>
+        <main className="w-full px-4 pb-24 pt-4 md:px-8 lg:px-12">{renderTab()}</main>
 
         {/* Bottom Navigation */}
         <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
