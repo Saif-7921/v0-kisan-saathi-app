@@ -52,16 +52,49 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
   const [result, setResult] = useState<DiseaseResult | null>(null)
   const { t } = useLanguage()
 
-  const handleImageSelected = useCallback((imageUrl: string) => {
+  const classifyImage = useCallback((imageFile: File | null) => {
+    if (!imageFile) {
+      return diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)]
+    }
+    
+    const fileName = imageFile.name.toLowerCase()
+    
+    // Smart classification based on filename
+    if (fileName.includes('rice') || fileName.includes('paddy')) {
+      return Math.random() > 0.5 ? diseaseDatabase[0] : diseaseDatabase[1]
+    } else if (fileName.includes('cotton')) {
+      return diseaseDatabase[2]
+    } else if (fileName.includes('wheat')) {
+      return diseaseDatabase[3]
+    } else if (fileName.includes('tomato')) {
+      return diseaseDatabase[4]
+    } else if (fileName.includes('sugarcane') || fileName.includes('cane')) {
+      return diseaseDatabase[5]
+    } else if (fileName.includes('maize') || fileName.includes('corn')) {
+      return diseaseDatabase[6]
+    } else if (fileName.includes('groundnut') || fileName.includes('peanut')) {
+      return diseaseDatabase[7]
+    } else if (fileName.includes('chilli') || fileName.includes('pepper')) {
+      return diseaseDatabase[8]
+    } else if (fileName.includes('sugarbeet') || fileName.includes('beet')) {
+      return diseaseDatabase[9]
+    } else {
+      // Default: pick based on file size hash
+      const index = imageFile.size % diseaseDatabase.length
+      return diseaseDatabase[index]
+    }
+  }, [])
+
+  const handleImageSelected = useCallback((imageUrl: string, imageFile?: File) => {
     setSelectedImage(imageUrl)
     setScreen("processing")
-    const randomDisease =
-      diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)]
+    const classifiedDisease = classifyImage(imageFile || null)
+    // 4 second realistic delay for processing
     setTimeout(() => {
-      setResult(randomDisease)
+      setResult(classifiedDisease)
       setScreen("results")
-    }, 3500)
-  }, [])
+    }, 4000)
+  }, [classifyImage])
 
   const handleScanAnother = useCallback(() => {
     setScreen("upload")
@@ -140,7 +173,7 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
 function UploadScreen({
   onImageSelected,
 }: {
-  onImageSelected: (url: string) => void
+  onImageSelected: (url: string, file?: File) => void
 }) {
   const { t } = useLanguage()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -151,7 +184,7 @@ function UploadScreen({
     (file: File) => {
       if (file && file.type.startsWith("image/")) {
         const url = URL.createObjectURL(file)
-        onImageSelected(url)
+        onImageSelected(url, file)
       }
     },
     [onImageSelected]
@@ -314,33 +347,22 @@ function UploadScreen({
 /* ================ SCREEN 2: Processing ================ */
 function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
   const { t } = useLanguage()
-  const [progress, setProgress] = useState(0)
-  const [messageIndex, setMessageIndex] = useState(0)
+  const [completedSteps, setCompletedSteps] = useState<number[]>([])
 
-  const messages = [
-    t("Scanning crop image...", "\u092B\u0938\u0932 \u091B\u0935\u093F \u0938\u094D\u0915\u0948\u0928 \u0915\u0930 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C2A\u0C02\u0C1F \u0C1A\u0C3F\u0C24\u0C4D\u0C30\u0C3E\u0C28\u0C4D\u0C28\u0C3F \u0C38\u0C4D\u0C15\u0C3E\u0C28\u0C4D \u0C1A\u0C47\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Detecting disease patterns...", "\u0930\u094B\u0917 \u092A\u0948\u091F\u0930\u094D\u0928 \u092A\u0939\u091A\u093E\u0928 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F \u0C28\u0C2E\u0C42\u0C28\u0C3E\u0C32\u0C28\u0C41 \u0C17\u0C41\u0C30\u0C4D\u0C24\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Cross-referencing crop database...", "\u092B\u0938\u0932 \u0921\u0947\u091F\u093E\u092C\u0947\u0938 \u0938\u0947 \u092E\u093F\u0932\u093E\u0928...", "\u0C2A\u0C02\u0C1F \u0C21\u0C47\u0C1F\u0C3E\u0C2C\u0C47\u0C38\u0C4D\u200C\u0C24\u0C4B \u0C38\u0C30\u0C3F\u0C2A\u0C4B\u0C32\u0C4D\u0C1A\u0C41\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Calculating damage severity...", "\u0915\u094D\u0937\u0924\u093F \u0917\u0902\u092D\u0940\u0930\u0924\u093E \u0917\u0923\u0928\u093E...", "\u0C28\u0C37\u0C4D\u0C1F\u0C02 \u0C24\u0C40\u0C35\u0C4D\u0C30\u0C24\u0C28\u0C41 \u0C32\u0C46\u0C15\u0C4D\u0C15\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Generating report...", "\u0930\u093F\u092A\u094B\u0930\u094D\u091F \u092C\u0928\u093E \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C28\u0C3F\u0C35\u0C47\u0C26\u0C3F\u0C15 \u0C30\u0C42\u0C2A\u0C4A\u0C02\u0C26\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
+  const steps = [
+    { time: 1000, label: t("Reading image quality...", "छवि गुणवत्ता पढ़ रहे हैं...", "ఇమేజ్ గుణాన్ని చదువుతున్నారు...") },
+    { time: 2000, label: t("Detecting crop type...", "फसल का प्रकार पहचान रहे हैं...", "పంట రకం గుర్తిస్తున్నారు...") },
+    { time: 3000, label: t("Matching disease patterns...", "रोग पैटर्न मेल खा रहे हैं...", "వ్యాధి నమూనాలను సరిపోల్చుతున్నారు...") },
+    { time: 4000, label: t("Calculating severity score...", "गंभीरता स्कोर की गणना...", "తీవ్రత స్కోర్ లెక్కిస్తున్నారు...") },
   ]
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) return 100
-        return p + 1
-      })
-    }, 33)
-    return () => clearInterval(interval)
+    steps.forEach((step, index) => {
+      setTimeout(() => {
+        setCompletedSteps((prev) => [...prev, index])
+      }, step.time)
+    })
   }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMessageIndex((i) => (i + 1) % messages.length)
-    }, 700)
-    return () => clearInterval(interval)
-  }, [messages.length])
 
   return (
     <div className="flex flex-col items-center gap-6">
@@ -353,55 +375,33 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
           crossOrigin="anonymous"
         />
         <div
-          className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"
-          style={{
-            animation: "scanLine 2s ease-in-out infinite",
-            top: `${(progress % 100)}%`,
-          }}
-        />
-        <div
           className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-primary"
           style={{ animation: "pulseRing 1.5s ease-in-out infinite" }}
         />
       </div>
 
-      {/* Circular Progress */}
-      <div className="relative flex size-28 items-center justify-center">
-        <svg className="size-28 -rotate-90" viewBox="0 0 100 100">
-          <circle
-            cx="50" cy="50" r="42" fill="none"
-            stroke="var(--color-muted)" strokeWidth="6"
-          />
-          <circle
-            cx="50" cy="50" r="42" fill="none"
-            stroke="var(--color-primary)" strokeWidth="6"
-            strokeLinecap="round"
-            strokeDasharray={`${2 * Math.PI * 42}`}
-            strokeDashoffset={`${2 * Math.PI * 42 * (1 - progress / 100)}`}
-            className="transition-all duration-100"
-          />
-        </svg>
-        <div className="absolute flex flex-col items-center">
-          <span className="text-2xl font-bold text-foreground">{Math.min(progress, 100)}%</span>
-          <span className="text-[10px] text-muted-foreground">~3 sec</span>
-        </div>
+      {/* 4-Step Processing Animation */}
+      <div className="w-full space-y-3">
+        {steps.map((step, index) => (
+          <div key={index} className="flex items-center gap-3">
+            {/* Step indicator */}
+            <div className="flex items-center justify-center size-8 rounded-full bg-muted">
+              {completedSteps.includes(index) ? (
+                <span className="text-green-600 font-bold">✓</span>
+              ) : index === completedSteps.length ? (
+                <div className="size-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+              ) : (
+                <span className="text-muted-foreground text-sm">{index + 1}</span>
+              )}
+            </div>
+            {/* Step label */}
+            <p className="text-sm font-medium text-foreground">{step.label}</p>
+          </div>
+        ))}
       </div>
-
-      {/* Animated Message */}
-      <p
-        className="text-center font-medium text-foreground"
-        style={{ fontSize: "clamp(0.85rem, 2.5vw, 1.1rem)" }}
-      >
-        {messages[messageIndex]}
-      </p>
 
       {/* CSS Animations */}
       <style jsx>{`
-        @keyframes scanLine {
-          0% { top: 0%; }
-          50% { top: 98%; }
-          100% { top: 0%; }
-        }
         @keyframes pulseRing {
           0%, 100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(45,106,79,0.4); }
           50% { opacity: 1; box-shadow: 0 0 0 8px rgba(45,106,79,0); }
