@@ -368,6 +368,7 @@ export const equipmentTypes = [
 export interface DiseaseResult {
   id: number
   name: string
+  teluguName?: string
   scientificName: string
   type: "Fungal" | "Viral" | "Bacterial"
   confidence: number
@@ -399,6 +400,7 @@ export const diseaseDatabase: DiseaseResult[] = [
   {
     id: 1,
     name: "Rice Blast Disease",
+    teluguName: "వరి బ్లాస్ట్",
     scientificName: "Magnaporthe oryzae",
     type: "Fungal",
     confidence: 94,
@@ -441,7 +443,7 @@ export const diseaseDatabase: DiseaseResult[] = [
     },
     recoveryTimeline: "14–21 days with proper treatment",
     yieldLoss: "20–70% if untreated",
-    estimatedTreatmentCost: "₹1,800 – ₹3,200 per acre",
+    estimatedTreatmentCost: "��1,800 – ₹3,200 per acre",
     expectedYield: 25,
     estimatedActualYield: 9,
     marketPrice: 2200,
@@ -450,6 +452,7 @@ export const diseaseDatabase: DiseaseResult[] = [
   {
     id: 2,
     name: "Rice Brown Spot",
+    teluguName: "గోధుమ గోధుమ మచ్చ",
     scientificName: "Bipolaris oryzae",
     type: "Fungal",
     confidence: 91,
@@ -486,6 +489,7 @@ export const diseaseDatabase: DiseaseResult[] = [
   {
     id: 3,
     name: "Cotton Leaf Curl Virus",
+    teluguName: "పత్తి ఆకు మురికి వైరస్",
     scientificName: "Cotton leaf curl Multan virus (CLCuMuV)",
     type: "Viral",
     confidence: 96,
@@ -700,9 +704,10 @@ export const diseaseDatabase: DiseaseResult[] = [
     marketPrice: 5500,
   },
   {
-    id: 9,
-    name: "Chilli Leaf Curl Virus",
-    scientificName: "Pepper leaf curl virus",
+    id: 3,
+    name: "Cotton Leaf Curl Virus",
+    teluguName: "పత్తి ఆకు మురికి వైరస్",
+    scientificName: "Cotton leaf curl Multan virus (CLCuMuV)",
     type: "Viral",
     confidence: 85,
     severity: "Moderate",

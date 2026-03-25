@@ -35,6 +35,7 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { useToastContext } from "@/lib/toast-context"
 import { equipmentListings, equipmentTypes } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+import { EquipmentImage } from "@/components/equipment-image"
 
 type View = "list" | "detail" | "add"
 
@@ -162,32 +163,8 @@ export function EquipmentMarketplace() {
           >
             <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg group-hover:scale-105">
               {/* Image Section - 16:9 aspect ratio */}
-              <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
-                <img
-                  src={eq.image}
-                  alt={eq.name}
-                  className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  loading="lazy"
-                  crossOrigin="anonymous"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement
-                    // Try fallback image
-                    if (eq.fallbackImage && target.src !== eq.fallbackImage) {
-                      target.src = eq.fallbackImage
-                      return
-                    }
-                    // Use emoji fallback
-                    target.style.display = "none"
-                    const parent = target.parentElement
-                    if (parent) {
-                      parent.classList.add("bg-gradient-to-br", "from-primary/20", "to-primary/5")
-                      const fallback = document.createElement("div")
-                      fallback.className = "absolute inset-0 flex items-center justify-center text-5xl"
-                      fallback.innerHTML = eq.emoji || "🚜"
-                      parent.appendChild(fallback)
-                    }
-                  }}
-                />
+              <div className="relative w-full overflow-hidden">
+                <EquipmentImage equipmentName={eq.name} />
                 {/* Gradient Overlay */}
                 <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)" }} />
                 {/* Availability badge top-left */}
@@ -289,9 +266,9 @@ function BookingModal({
   const [confirming, setConfirming] = useState(false)
 
   const basePrice = durationType === "days"
-    ? equipment.pricePerDay * Number(duration)
-    : equipment.pricePerHour * Number(duration)
-  const deliveryCost = delivery && equipment.deliveryAvailable ? equipment.deliveryCost : 0
+    ? equipment.price * Number(duration)
+    : (equipment.price / 8) * Number(duration)
+  const deliveryCost = 0
   const total = basePrice + deliveryCost
 
   const handleConfirm = () => {
