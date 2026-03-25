@@ -59,7 +59,7 @@ export function EquipmentMarketplace() {
 
   const sorted = [...filtered].sort((a, b) => {
     if (sortBy === "distance") return a.distance - b.distance
-    if (sortBy === "price") return a.pricePerDay - b.pricePerDay
+    if (sortBy === "price") return a.price - b.price
     if (sortBy === "rating") return b.rating - a.rating
     return 0
   })
@@ -80,16 +80,19 @@ export function EquipmentMarketplace() {
 
   const conditionColor = (c: string) =>
     c === "Good" ? "bg-primary/15 text-primary" : c === "Fair" ? "bg-secondary/20 text-secondary-foreground" : "bg-destructive/15 text-destructive"
-  const availColor = (l: string) =>
-    l === "Available Now" ? "bg-primary/15 text-primary" : l === "Booked" ? "bg-destructive/15 text-destructive" : "bg-secondary/20 text-secondary-foreground"
 
   return (
     <div className="flex flex-col gap-4 pb-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-xl font-bold">
-          {t("Equipment Marketplace", "\u0909\u092A\u0915\u0930\u0923 \u092C\u093E\u091C\u093C\u093E\u0930", "\u0C2A\u0C30\u0C3F\u0C15\u0C30\u0C3E\u0C32 \u0C2E\u0C3E\u0C30\u0C4D\u0C15\u0C46\u0C1F\u0C4D")}
-        </h1>
+      {/* Header with Title and Subtitle */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold text-foreground">
+            {t("\ud83d\ude9c Equipment Near You", "\ud83d\ude9c \u0906\u0938\u092A\u093E\u0938 \u0909\u092A\u0915\u0930\u0923", "\ud83d\ude9c \u0C28\u0C3F\u0C02\u0C26\u0C28 \u0C2A\u0C30\u0C3F\u0C15\u0C30\u0C3E\u0C32\u0C41")}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t(`${sorted.length} items available within 10km`, `${sorted.length} \u092A\u0930\u092E\u093E\u0923\u0941 10\u0915\u0940 \u0905\u0902\u0924\u0930 \u0915\u0947 \u092D\u0940\u0924\u0930 \u0909\u092A\u0932\u092C\u094D\u0927`, `${sorted.length} \u0C07\u0C30\u0C1A\u0C3E\u0C32\u0C4D\u0C15\u0C41 10 \u0C15\u0C3F.`)}
+          </p>
+        </div>
         <LanguageToggle />
       </div>
 
@@ -146,8 +149,8 @@ export function EquipmentMarketplace() {
         {t("List My Equipment", "\u0905\u092A\u0928\u093E \u0909\u092A\u0915\u0930\u0923 \u091C\u094B\u0921\u093C\u0947\u0902", "\u0C28\u0C3E \u0C2A\u0C30\u0C3F\u0C15\u0C30\u0C02 \u0C1C\u0C3E\u0C2C\u0C3F\u0C24\u0C3E")}
       </Button>
 
-      {/* Equipment Cards with Images */}
-      <div className="flex flex-col gap-3">
+      {/* Equipment Cards with Images - Responsive Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {sorted.map((eq) => (
           <button
             key={eq.id}
@@ -155,26 +158,32 @@ export function EquipmentMarketplace() {
               setSelectedEquipment(eq)
               setView("detail")
             }}
-            className="text-left"
+            className="text-left group"
           >
-            <Card className="overflow-hidden transition-shadow hover:shadow-md">
-              {/* Image Section */}
-              <div className="relative h-40 w-full overflow-hidden md:h-48">
+            <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg group-hover:scale-105">
+              {/* Image Section - 16:9 aspect ratio */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
                 <img
                   src={eq.image}
                   alt={eq.name}
-                  className="size-full object-cover"
+                  className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                   crossOrigin="anonymous"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement
+                    // Try fallback image
+                    if (eq.fallbackImage && target.src !== eq.fallbackImage) {
+                      target.src = eq.fallbackImage
+                      return
+                    }
+                    // Use emoji fallback
                     target.style.display = "none"
                     const parent = target.parentElement
                     if (parent) {
                       parent.classList.add("bg-gradient-to-br", "from-primary/20", "to-primary/5")
                       const fallback = document.createElement("div")
-                      fallback.className = "absolute inset-0 flex items-center justify-center"
-                      fallback.innerHTML = '<span class="text-4xl">🚜</span>'
+                      fallback.className = "absolute inset-0 flex items-center justify-center text-5xl"
+                      fallback.innerHTML = eq.emoji || "🚜"
                       parent.appendChild(fallback)
                     }
                   }}
@@ -182,8 +191,8 @@ export function EquipmentMarketplace() {
                 {/* Gradient Overlay */}
                 <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)" }} />
                 {/* Availability badge top-left */}
-                <Badge className={cn("absolute left-2 top-2 text-[10px]", availColor(eq.availabilityLabel))}>
-                  {eq.availabilityLabel}
+                <Badge className={cn("absolute left-2 top-2 text-[10px]", eq.available ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive")}>
+                  {eq.available ? "Available Now" : "Booked"}
                 </Badge>
                 {/* Condition badge top-right */}
                 <Badge className={cn("absolute right-2 top-2 text-[10px]", conditionColor(eq.condition))}>
@@ -212,10 +221,35 @@ export function EquipmentMarketplace() {
                     {eq.rating} ({eq.reviews})
                   </div>
                 </div>
-                <div className="mt-2 flex items-center justify-between">
+                <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="text-sm font-bold text-primary">
-                    {"\u20B9"}{eq.pricePerDay}/day
+                    {"\u20B9"}{eq.price}/{eq.priceUnit}
                   </span>
+                  <span className="text-xs text-muted-foreground">
+                    {eq.specs}
+                  </span>
+                </div>
+                {/* Action Buttons */}
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedEquipment(eq)
+                      setShowBookingModal(true)
+                    }}
+                    className="flex-1 rounded-lg bg-primary text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/90 active:scale-95 py-2"
+                  >
+                    {t("Book Now", "अभी बुक करें", "ఇప్పుడు బుక్ చేయండి")}
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      window.location.href = `tel:${eq.phone}`
+                    }}
+                    className="rounded-lg border border-primary text-xs font-semibold text-primary transition-all hover:bg-primary/10 active:scale-95 px-3 py-2"
+                  >
+                    {t("Call", "कॉल", "కాల్ చేయండి")}
+                  </button>
                 </div>
               </CardContent>
             </Card>

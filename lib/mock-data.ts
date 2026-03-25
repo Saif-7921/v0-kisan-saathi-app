@@ -369,22 +369,30 @@ export interface DiseaseResult {
   id: number
   name: string
   scientificName: string
-  type: string
+  type: "Fungal" | "Viral" | "Bacterial"
   confidence: number
   severity: "Severe" | "Moderate" | "Mild"
+  severityColor?: "red" | "yellow" | "green"
   cropAffectedPct: number
+  cropType?: string
+  cropEmoji?: string
   description: string
   symptoms?: string[]
   causes: string[] | string
   weatherCause: string
   affectedParts: string[]
-  treatment: { name: string; dosage: string; cost: number }[]
+  treatment: { name: string; dosage: string; cost: number }[] | {
+    chemical?: { name: string; dose: string; cost: number; frequency: string }[]
+    organic?: { name: string; dose: string; cost: number; frequency: string }[]
+    preventive?: { name: string; description: string }[]
+  }
   recoveryTimeline: string
   yieldLoss?: string
   estimatedTreatmentCost?: string
   expectedYield: number
   estimatedActualYield: number
   marketPrice: number
+  totalCost?: number
 }
 
 export const diseaseDatabase: DiseaseResult[] = [
@@ -395,7 +403,10 @@ export const diseaseDatabase: DiseaseResult[] = [
     type: "Fungal",
     confidence: 94,
     severity: "Severe",
+    severityColor: "red",
     cropAffectedPct: 68,
+    cropType: "Rice",
+    cropEmoji: "🌾",
     description: "Rice blast is one of the most destructive diseases of rice worldwide causing diamond-shaped lesions with gray centers on leaves.",
     symptoms: [
       "Diamond-shaped lesions with gray centers on leaves",
@@ -413,16 +424,28 @@ export const diseaseDatabase: DiseaseResult[] = [
     ],
     weatherCause: "Recent heavy rainfall with high humidity (89%) and moderate temperatures (28°C)",
     affectedParts: ["leaves", "nodes", "panicles"],
-    treatment: [
-      { name: "Tricyclazole 75% WP", dosage: "6g per 10L water", cost: 280 },
-      { name: "Isoprothiolane 40% EC", dosage: "1.5ml per L", cost: 320 }
-    ],
+    treatment: {
+      chemical: [
+        { name: "Tricyclazole 75% WP", dose: "6g per 10L", cost: 280, frequency: "7-day intervals" },
+        { name: "Isoprothiolane 40% EC", dose: "1.5ml per L", cost: 320, frequency: "10-day intervals" }
+      ],
+      organic: [
+        { name: "Sulfur dust 80%", dose: "20-25kg per acre", cost: 120, frequency: "Weekly" },
+        { name: "Copper fungicide", dose: "1.5kg per acre", cost: 200, frequency: "10-day intervals" }
+      ],
+      preventive: [
+        { name: "Use resistant rice varieties", description: "Plant blast-resistant varieties suited to your region" },
+        { name: "Manage nitrogen levels", description: "Apply balanced fertilizer, avoid excess nitrogen" },
+        { name: "Improve drainage", description: "Ensure proper field drainage to reduce humidity" }
+      ]
+    },
     recoveryTimeline: "14–21 days with proper treatment",
     yieldLoss: "20–70% if untreated",
     estimatedTreatmentCost: "₹1,800 – ₹3,200 per acre",
     expectedYield: 25,
     estimatedActualYield: 9,
     marketPrice: 2200,
+    totalCost: 2400,
   },
   {
     id: 2,
