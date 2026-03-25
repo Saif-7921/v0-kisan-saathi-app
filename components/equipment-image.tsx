@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { equipmentImageMap } from "@/lib/equipment-images"
+import { useState, useEffect } from "react"
+import { getEquipmentImage } from "@/lib/equipment-images"
 
 interface EquipmentImageProps {
   equipmentName: string
@@ -9,28 +9,21 @@ interface EquipmentImageProps {
 
 export function EquipmentImage({ equipmentName }: EquipmentImageProps) {
   const [status, setStatus] = useState<"loading" | "loaded" | "primary-failed" | "fallback-failed">("loading")
-  const imageData = equipmentImageMap[equipmentName as keyof typeof equipmentImageMap]
+  const [imageData, setImageData] = useState(() => getEquipmentImage(equipmentName))
 
-  if (!imageData) {
-    return (
-      <div
-        className="relative w-full overflow-hidden rounded-t-lg flex items-center justify-center"
-        style={{ aspectRatio: "16/9", background: "linear-gradient(135deg, #e5e7eb, #f3f4f6)" }}
-      >
-        <span className="text-4xl">🚜</span>
-      </div>
-    )
-  }
-
+  useEffect(() => {
+    setImageData(getEquipmentImage(equipmentName))
+    setStatus("loading")
+  }, [equipmentName])
   return (
     <div
-      className="relative w-full overflow-hidden rounded-t-lg"
+      className="relative w-full overflow-hidden"
       style={{ aspectRatio: "16/9", borderRadius: "12px 12px 0 0" }}
     >
       {/* Shimmer skeleton while loading */}
       {status === "loading" && (
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-10"
           style={{
             background: "linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%)",
             backgroundSize: "200% 100%",
@@ -39,15 +32,14 @@ export function EquipmentImage({ equipmentName }: EquipmentImageProps) {
         />
       )}
 
-      {/* Primary image or fallback */}
+      {/* Primary image with lazy loading */}
       {status !== "fallback-failed" && (
         <img
           src={status === "primary-failed" ? imageData.fallback : imageData.primary}
           alt={equipmentName}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-opacity duration-300"
           style={{
             opacity: status === "loading" ? 0 : 1,
-            transition: "opacity 0.4s ease"
           }}
           onLoad={() => setStatus("loaded")}
           onError={() => {
@@ -58,29 +50,33 @@ export function EquipmentImage({ equipmentName }: EquipmentImageProps) {
             }
           }}
           crossOrigin="anonymous"
+          loading="lazy"
+          decoding="async"
         />
       )}
 
-      {/* Final emoji fallback — only when both URLs fail */}
+      {/* Fallback: Emoji gradient when both images fail */}
       {status === "fallback-failed" && (
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-3"
           style={{ background: imageData.gradient }}
         >
-          <span style={{ fontSize: "64px" }}>{imageData.emoji}</span>
-          <span className="text-white font-bold text-sm text-center px-4">
+          <span style={{ fontSize: "5rem", opacity: 0.9 }}>{imageData.emoji}</span>
+          <span className="text-white font-bold text-sm text-center px-4 max-w-xs line-clamp-2">
             {equipmentName}
           </span>
         </div>
       )}
 
-      {/* Dark overlay for text readability */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.05) 50%, transparent 100%)"
-        }}
-      />
+      {/* Dark overlay for text readability on images */}
+      {status !== "fallback-failed" && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)"
+          }}
+        />
+      )}
 
       <style jsx>{`
         @keyframes shimmer {

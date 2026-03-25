@@ -165,8 +165,6 @@ export function EquipmentMarketplace() {
               {/* Image Section - 16:9 aspect ratio */}
               <div className="relative w-full overflow-hidden">
                 <EquipmentImage equipmentName={eq.name} />
-                {/* Gradient Overlay */}
-                <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)" }} />
                 {/* Availability badge top-left */}
                 <Badge className={cn("absolute left-2 top-2 text-[10px]", eq.available ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive")}>
                   {eq.available ? "Available Now" : "Booked"}
