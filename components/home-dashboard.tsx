@@ -16,6 +16,10 @@ import {
   Clock,
   IndianRupee,
   Microscope,
+  Cpu,
+  Building2,
+  Wallet,
+  ShoppingBag,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -30,12 +34,15 @@ import {
 } from "@/lib/mock-data"
 import type { TabId } from "@/components/bottom-nav"
 
+type ExtendedView = "smartFarm" | "schemes" | "finance" | "expenses" | "marketplace" | "alerts" | null
+
 interface HomeDashboardProps {
   onNavigate: (tab: TabId) => void
   onDetectDisease?: () => void
+  onExtendedView?: (view: ExtendedView) => void
 }
 
-export function HomeDashboard({ onNavigate, onDetectDisease }: HomeDashboardProps) {
+export function HomeDashboard({ onNavigate, onDetectDisease, onExtendedView }: HomeDashboardProps) {
   const { t } = useLanguage()
 
   return (
@@ -209,6 +216,62 @@ export function HomeDashboard({ onNavigate, onDetectDisease }: HomeDashboardProp
                 <Microscope className="relative size-8 text-[#F5A623]" />
               </div>
             </div>
+          </button>
+        </div>
+      </div>
+
+      {/* New Features Quick Access */}
+      <div>
+        <h2 className="mb-3 font-serif text-lg font-bold">
+          {t("Smart Features", "स्मार्ट सुविधाएं", "స్మార్ట్ ఫీచర్లు")}
+        </h2>
+        <div className="grid grid-cols-4 gap-3">
+          <button
+            onClick={() => onExtendedView?.("smartFarm")}
+            className="flex flex-col items-center gap-2 rounded-xl bg-primary/10 p-4 transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+          >
+            <div className="flex size-10 items-center justify-center rounded-full bg-primary/20">
+              <Cpu className="size-5 text-primary" />
+            </div>
+            <span className="text-center text-[10px] font-medium leading-tight">
+              {t("Smart Farm", "स्मार्ट फार्म", "స్మార్ట్ ఫార్మ్")}
+            </span>
+          </button>
+
+          <button
+            onClick={() => onExtendedView?.("schemes")}
+            className="flex flex-col items-center gap-2 rounded-xl bg-secondary/10 p-4 transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+          >
+            <div className="flex size-10 items-center justify-center rounded-full bg-secondary/20">
+              <Building2 className="size-5 text-secondary-foreground" />
+            </div>
+            <span className="text-center text-[10px] font-medium leading-tight">
+              {t("Schemes", "योजनाएं", "పథకాలు")}
+            </span>
+          </button>
+
+          <button
+            onClick={() => onExtendedView?.("finance")}
+            className="flex flex-col items-center gap-2 rounded-xl bg-accent/10 p-4 transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+          >
+            <div className="flex size-10 items-center justify-center rounded-full bg-accent/20">
+              <Wallet className="size-5 text-accent-foreground" />
+            </div>
+            <span className="text-center text-[10px] font-medium leading-tight">
+              {t("Finance", "वित्त", "ఆర్థిక")}
+            </span>
+          </button>
+
+          <button
+            onClick={() => onExtendedView?.("marketplace")}
+            className="flex flex-col items-center gap-2 rounded-xl bg-muted p-4 transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+          >
+            <div className="flex size-10 items-center justify-center rounded-full bg-foreground/10">
+              <ShoppingBag className="size-5 text-foreground" />
+            </div>
+            <span className="text-center text-[10px] font-medium leading-tight">
+              {t("Market", "बाज़ार", "మార్కెట్")}
+            </span>
           </button>
         </div>
       </div>

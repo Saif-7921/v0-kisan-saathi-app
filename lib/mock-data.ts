@@ -786,3 +786,399 @@ export const monthlyEarnings = [
   { month: "Jan", claims: 45000, rental: 3200 },
   { month: "Feb", claims: 0, rental: 2000 },
 ]
+
+// ---- IoT Sensor Data ----
+export const iotSensorData = {
+  soilMoisture: {
+    current: 42,
+    threshold: 35,
+    unit: "%",
+    history: [
+      { time: "6AM", value: 55 },
+      { time: "9AM", value: 52 },
+      { time: "12PM", value: 48 },
+      { time: "3PM", value: 44 },
+      { time: "6PM", value: 42 },
+      { time: "9PM", value: 45 },
+    ],
+  },
+  temperature: {
+    current: 32,
+    min: 24,
+    max: 38,
+    unit: "°C",
+    history: [
+      { time: "6AM", value: 24 },
+      { time: "9AM", value: 28 },
+      { time: "12PM", value: 35 },
+      { time: "3PM", value: 38 },
+      { time: "6PM", value: 32 },
+      { time: "9PM", value: 28 },
+    ],
+  },
+  humidity: {
+    current: 68,
+    unit: "%",
+    history: [
+      { time: "6AM", value: 85 },
+      { time: "9AM", value: 75 },
+      { time: "12PM", value: 62 },
+      { time: "3PM", value: 58 },
+      { time: "6PM", value: 68 },
+      { time: "9PM", value: 78 },
+    ],
+  },
+  lastUpdated: "2 min ago",
+}
+
+// ---- Government Schemes ----
+export interface GovernmentScheme {
+  id: string
+  title: string
+  titleHi: string
+  category: "loan" | "subsidy" | "insurance"
+  state: string
+  eligibility: string[]
+  benefits: string[]
+  deadline: string
+  applicationUrl: string
+  amount?: string
+}
+
+export const governmentSchemes: GovernmentScheme[] = [
+  {
+    id: "pm-kisan",
+    title: "PM-KISAN Samman Nidhi",
+    titleHi: "पीएम-किसान सम्मान निधि",
+    category: "subsidy",
+    state: "All India",
+    eligibility: [
+      "Small & marginal farmers",
+      "Land ownership required",
+      "Aadhaar linked bank account",
+    ],
+    benefits: [
+      "Rs. 6,000 per year direct transfer",
+      "Paid in 3 installments of Rs. 2,000",
+      "No repayment required",
+    ],
+    deadline: "Ongoing",
+    applicationUrl: "https://pmkisan.gov.in",
+    amount: "Rs. 6,000/year",
+  },
+  {
+    id: "pmfby",
+    title: "PM Fasal Bima Yojana",
+    titleHi: "प्रधानमंत्री फसल बीमा योजना",
+    category: "insurance",
+    state: "All India",
+    eligibility: [
+      "All farmers growing notified crops",
+      "Share-croppers & tenant farmers included",
+      "Valid land records or tenancy agreement",
+    ],
+    benefits: [
+      "Low premium: 2% for Kharif, 1.5% for Rabi",
+      "Full sum insured on crop loss",
+      "Coverage for natural calamities, pests, diseases",
+    ],
+    deadline: "Kharif: July 31, Rabi: Dec 31",
+    applicationUrl: "https://pmfby.gov.in",
+    amount: "Up to Rs. 2 Lakh",
+  },
+  {
+    id: "kcc",
+    title: "Kisan Credit Card",
+    titleHi: "किसान क्रेडिट कार्ड",
+    category: "loan",
+    state: "All India",
+    eligibility: [
+      "Farmers, sharecroppers, tenant farmers",
+      "Self-help groups, joint liability groups",
+      "Age: 18-75 years",
+    ],
+    benefits: [
+      "Credit limit up to Rs. 3 Lakh",
+      "Interest rate: 4% (with subsidy)",
+      "Flexible repayment after harvest",
+    ],
+    deadline: "Ongoing",
+    applicationUrl: "https://www.nabard.org",
+    amount: "Up to Rs. 3 Lakh",
+  },
+  {
+    id: "ts-rythu-bandhu",
+    title: "Rythu Bandhu Scheme",
+    titleHi: "रायथु बंधु योजना",
+    category: "subsidy",
+    state: "Telangana",
+    eligibility: [
+      "All land-owning farmers in Telangana",
+      "No income limit",
+      "Valid land patta required",
+    ],
+    benefits: [
+      "Rs. 10,000 per acre per season",
+      "Direct bank transfer",
+      "Two seasons - Kharif & Rabi",
+    ],
+    deadline: "Before each cropping season",
+    applicationUrl: "https://treasury.telangana.gov.in",
+    amount: "Rs. 10,000/acre/season",
+  },
+  {
+    id: "ap-ysr-rythu",
+    title: "YSR Rythu Bharosa",
+    titleHi: "वायएसआर रायतु भरोसा",
+    category: "subsidy",
+    state: "Andhra Pradesh",
+    eligibility: [
+      "All farmers in Andhra Pradesh",
+      "Includes tenant farmers",
+      "Land ceiling: 5 acres wet / 10 acres dry",
+    ],
+    benefits: [
+      "Rs. 13,500 per year for land owners",
+      "Rs. 13,500 for tenant farmers",
+      "Additional Rs. 4,000 during Kharif",
+    ],
+    deadline: "May 15 (Kharif), Oct 15 (Rabi)",
+    applicationUrl: "https://ysrrythubharosa.ap.gov.in",
+    amount: "Rs. 13,500/year",
+  },
+  {
+    id: "solar-pump",
+    title: "PM-KUSUM Solar Pump",
+    titleHi: "पीएम-कुसुम सोलर पंप",
+    category: "subsidy",
+    state: "All India",
+    eligibility: [
+      "Individual farmers or groups",
+      "Barren/cultivable land available",
+      "Existing grid-connected pumps for solarization",
+    ],
+    benefits: [
+      "60% subsidy on solar pumps",
+      "Additional 30% bank loan support",
+      "Farmer pays only 10%",
+    ],
+    deadline: "Ongoing till target achieved",
+    applicationUrl: "https://pmkusum.mnre.gov.in",
+    amount: "Up to 60% subsidy",
+  },
+]
+
+// ---- Finance Data ----
+export const financeData = {
+  bankAccount: {
+    bankName: "State Bank of India",
+    accountNumber: "XXXX XXXX 7891",
+    ifsc: "SBIN0001234",
+    balance: 45680,
+  },
+  loans: [
+    {
+      id: "LN-001",
+      type: "Kisan Credit Card",
+      amount: 150000,
+      outstanding: 42000,
+      interestRate: 4,
+      emi: 3500,
+      nextDue: "2025-03-15",
+      status: "active",
+    },
+  ],
+  subsidies: [
+    {
+      id: "SUB-001",
+      name: "Rythu Bandhu",
+      amount: 25000,
+      status: "credited",
+      date: "2025-01-15",
+    },
+    {
+      id: "SUB-002",
+      name: "PM-KISAN",
+      amount: 2000,
+      status: "pending",
+      date: "2025-02-28",
+    },
+  ],
+  transactions: [
+    { id: "TXN-001", type: "credit", description: "Rythu Bandhu", amount: 25000, date: "2025-01-15" },
+    { id: "TXN-002", type: "debit", description: "Seeds Purchase", amount: 8500, date: "2025-01-18" },
+    { id: "TXN-003", type: "debit", description: "KCC EMI", amount: 3500, date: "2025-01-20" },
+    { id: "TXN-004", type: "credit", description: "Equipment Rental", amount: 1200, date: "2025-01-25" },
+    { id: "TXN-005", type: "debit", description: "Fertilizer", amount: 4200, date: "2025-02-01" },
+  ],
+}
+
+// ---- Expense Tracker ----
+export const expenseCategories = [
+  { id: "seeds", label: "Seeds", labelHi: "बीज", icon: "Sprout" },
+  { id: "fertilizer", label: "Fertilizer", labelHi: "उर्वरक", icon: "FlaskConical" },
+  { id: "pesticide", label: "Pesticide", labelHi: "कीटनाशक", icon: "Bug" },
+  { id: "labor", label: "Labor", labelHi: "मजदूरी", icon: "Users" },
+  { id: "equipment", label: "Equipment", labelHi: "उपकरण", icon: "Tractor" },
+  { id: "irrigation", label: "Irrigation", labelHi: "सिंचाई", icon: "Droplets" },
+  { id: "transport", label: "Transport", labelHi: "परिवहन", icon: "Truck" },
+  { id: "other", label: "Other", labelHi: "अन्य", icon: "MoreHorizontal" },
+]
+
+export const expenses = [
+  { id: "EXP-001", category: "seeds", description: "Rice Seeds (25kg)", amount: 3500, date: "2025-01-10" },
+  { id: "EXP-002", category: "fertilizer", description: "DAP 50kg x 2", amount: 2800, date: "2025-01-15" },
+  { id: "EXP-003", category: "labor", description: "Field Preparation", amount: 5000, date: "2025-01-18" },
+  { id: "EXP-004", category: "equipment", description: "Tractor Rental", amount: 1800, date: "2025-01-20" },
+  { id: "EXP-005", category: "irrigation", description: "Pump Diesel", amount: 1200, date: "2025-01-25" },
+  { id: "EXP-006", category: "pesticide", description: "Fungicide Spray", amount: 1500, date: "2025-02-01" },
+]
+
+export const cropSales = [
+  { id: "SALE-001", crop: "Rice", quantity: 15, unit: "quintals", pricePerUnit: 2200, amount: 33000, date: "2024-12-20" },
+  { id: "SALE-002", crop: "Cotton", quantity: 8, unit: "quintals", pricePerUnit: 6500, amount: 52000, date: "2024-11-15" },
+]
+
+// ---- Marketplace Listings ----
+export const marketplaceListings = [
+  {
+    id: "MKT-001",
+    type: "sell",
+    crop: "Rice (Sona Masuri)",
+    quantity: 20,
+    unit: "quintals",
+    pricePerUnit: 2400,
+    location: "Peddapalli",
+    seller: "Ramesh Kumar",
+    phone: "9876543210",
+    postedDate: "2025-02-10",
+    quality: "Grade A",
+    available: true,
+  },
+  {
+    id: "MKT-002",
+    type: "sell",
+    crop: "Cotton (DCH-32)",
+    quantity: 15,
+    unit: "quintals",
+    pricePerUnit: 6800,
+    location: "Karimnagar",
+    seller: "Suresh Reddy",
+    phone: "9876541111",
+    postedDate: "2025-02-08",
+    quality: "Premium",
+    available: true,
+  },
+  {
+    id: "MKT-003",
+    type: "buy",
+    crop: "Groundnut Seeds",
+    quantity: 5,
+    unit: "quintals",
+    pricePerUnit: 8500,
+    location: "Warangal",
+    seller: "Anjali Farms",
+    phone: "9876542222",
+    postedDate: "2025-02-05",
+    quality: "Certified Seeds",
+    available: true,
+  },
+  {
+    id: "MKT-004",
+    type: "sell",
+    crop: "Wheat (HD-2967)",
+    quantity: 30,
+    unit: "quintals",
+    pricePerUnit: 2500,
+    location: "Nizamabad",
+    seller: "Gopal Rao",
+    phone: "9876543333",
+    postedDate: "2025-02-01",
+    quality: "Grade A",
+    available: true,
+  },
+]
+
+// ---- Smart Alerts ----
+export const smartAlerts = [
+  {
+    id: "ALT-001",
+    type: "weather",
+    title: "Heavy Rain Warning",
+    titleHi: "भारी बारिश की चेतावनी",
+    message: "Heavy rainfall expected in next 24-48 hours. Secure crops and drainage.",
+    severity: "high",
+    timestamp: "2025-02-15T10:30:00",
+    read: false,
+  },
+  {
+    id: "ALT-002",
+    type: "price",
+    title: "Rice Price Alert",
+    titleHi: "चावल मूल्य सूचना",
+    message: "Rice MSP increased by Rs. 100/quintal. Current rate: Rs. 2,300/quintal.",
+    severity: "medium",
+    timestamp: "2025-02-14T14:00:00",
+    read: false,
+  },
+  {
+    id: "ALT-003",
+    type: "scheme",
+    title: "PM-KISAN Deadline",
+    titleHi: "पीएम-किसान समय सीमा",
+    message: "Last date for PM-KISAN registration is Feb 28. Apply now!",
+    severity: "high",
+    timestamp: "2025-02-13T09:00:00",
+    read: true,
+  },
+  {
+    id: "ALT-004",
+    type: "irrigation",
+    title: "Low Soil Moisture",
+    titleHi: "मिट्टी में कम नमी",
+    message: "Soil moisture below 35%. Consider irrigation within 24 hours.",
+    severity: "medium",
+    timestamp: "2025-02-15T08:00:00",
+    read: false,
+  },
+]
+
+// ---- AI Predictions ----
+export const aiPredictions = {
+  yieldPrediction: {
+    crop: "Rice",
+    expectedYield: 28,
+    predictedYield: 24,
+    confidence: 85,
+    factors: [
+      { name: "Weather Impact", impact: -8, description: "Excess rainfall during flowering stage" },
+      { name: "Soil Health", impact: +3, description: "Good nitrogen levels" },
+      { name: "Disease Risk", impact: -5, description: "Moderate blast risk detected" },
+    ],
+  },
+  diseaseRisk: {
+    overall: "Medium",
+    risks: [
+      { disease: "Rice Blast", probability: 45, trend: "increasing" },
+      { disease: "Brown Spot", probability: 25, trend: "stable" },
+      { disease: "Sheath Blight", probability: 15, trend: "decreasing" },
+    ],
+  },
+  weatherImpact: {
+    nextWeek: "Moderate",
+    rainfall: { expected: 45, impact: "Positive for current growth stage" },
+    temperature: { avg: 30, impact: "Optimal range for grain filling" },
+    humidity: { avg: 75, impact: "Monitor for fungal diseases" },
+    recommendation: "Apply preventive fungicide spray before next rain spell",
+  },
+}
+
+// ---- Chatbot Quick Actions ----
+export const chatbotQuickActions = [
+  { id: "weather", label: "Weather today?", labelHi: "आज का मौसम?" },
+  { id: "best-crop", label: "Best crop now?", labelHi: "अभी कौनसी फसल?" },
+  { id: "market-price", label: "Market prices", labelHi: "बाजार भाव" },
+  { id: "disease-help", label: "Disease help", labelHi: "रोग सहायता" },
+  { id: "scheme-info", label: "Govt schemes", labelHi: "सरकारी योजनाएं" },
+  { id: "loan-status", label: "Loan status", labelHi: "ऋण स्थिति" },
+]
