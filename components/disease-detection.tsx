@@ -33,6 +33,8 @@ import { useToastContext } from "@/lib/toast-context"
 import { ReportScreen } from "@/components/report-screen"
 import { diseaseDatabase } from "@/lib/mock-data"
 import type { DiseaseResult } from "@/lib/mock-data"
+import { detectDisease, getConfidence, processingStages, totalProcessingTime } from "@/lib/disease-detection"
+import { ConfidenceArc } from "@/components/confidence-arc"
 import {
   RadialBarChart,
   RadialBar,
@@ -52,16 +54,27 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
   const [result, setResult] = useState<DiseaseResult | null>(null)
   const { t } = useLanguage()
 
-  const handleImageSelected = useCallback((imageUrl: string) => {
+  const classifyImage = useCallback((imageFile: File | null) => {
+    if (!imageFile) {
+      const randomDisease = diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)]
+      const confidence = getConfidence(randomDisease.confidence, "")
+      return { ...randomDisease, confidence }
+    }
+    
+    const disease = detectDisease(imageFile)
+    const confidence = getConfidence(disease.confidence, imageFile.name)
+    return { ...disease, confidence }
+  }, [])
+
+  const handleImageSelected = useCallback((imageUrl: string, imageFile?: File) => {
     setSelectedImage(imageUrl)
     setScreen("processing")
-    const randomDisease =
-      diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)]
+    const classifiedDisease = classifyImage(imageFile || null)
     setTimeout(() => {
-      setResult(randomDisease)
+      setResult(classifiedDisease)
       setScreen("results")
-    }, 3500)
-  }, [])
+    }, totalProcessingTime)
+  }, [classifyImage])
 
   const handleScanAnother = useCallback(() => {
     setScreen("upload")
@@ -140,7 +153,7 @@ export function DiseaseDetection({ onBack, onFileClaim }: DiseaseDetectionProps)
 function UploadScreen({
   onImageSelected,
 }: {
-  onImageSelected: (url: string) => void
+  onImageSelected: (url: string, file?: File) => void
 }) {
   const { t } = useLanguage()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -151,7 +164,7 @@ function UploadScreen({
     (file: File) => {
       if (file && file.type.startsWith("image/")) {
         const url = URL.createObjectURL(file)
-        onImageSelected(url)
+        onImageSelected(url, file)
       }
     },
     [onImageSelected]
@@ -313,38 +326,28 @@ function UploadScreen({
 
 /* ================ SCREEN 2: Processing ================ */
 function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
-  const { t } = useLanguage()
-  const [progress, setProgress] = useState(0)
-  const [messageIndex, setMessageIndex] = useState(0)
-
-  const messages = [
-    t("Scanning crop image...", "\u092B\u0938\u0932 \u091B\u0935\u093F \u0938\u094D\u0915\u0948\u0928 \u0915\u0930 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C2A\u0C02\u0C1F \u0C1A\u0C3F\u0C24\u0C4D\u0C30\u0C3E\u0C28\u0C4D\u0C28\u0C3F \u0C38\u0C4D\u0C15\u0C3E\u0C28\u0C4D \u0C1A\u0C47\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Detecting disease patterns...", "\u0930\u094B\u0917 \u092A\u0948\u091F\u0930\u094D\u0928 \u092A\u0939\u091A\u093E\u0928 \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C35\u0C4D\u0C2F\u0C3E\u0C27\u0C3F \u0C28\u0C2E\u0C42\u0C28\u0C3E\u0C32\u0C28\u0C41 \u0C17\u0C41\u0C30\u0C4D\u0C24\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Cross-referencing crop database...", "\u092B\u0938\u0932 \u0921\u0947\u091F\u093E\u092C\u0947\u0938 \u0938\u0947 \u092E\u093F\u0932\u093E\u0928...", "\u0C2A\u0C02\u0C1F \u0C21\u0C47\u0C1F\u0C3E\u0C2C\u0C47\u0C38\u0C4D\u200C\u0C24\u0C4B \u0C38\u0C30\u0C3F\u0C2A\u0C4B\u0C32\u0C4D\u0C1A\u0C41\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Calculating damage severity...", "\u0915\u094D\u0937\u0924\u093F \u0917\u0902\u092D\u0940\u0930\u0924\u093E \u0917\u0923\u0928\u093E...", "\u0C28\u0C37\u0C4D\u0C1F\u0C02 \u0C24\u0C40\u0C35\u0C4D\u0C30\u0C24\u0C28\u0C41 \u0C32\u0C46\u0C15\u0C4D\u0C15\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-    t("Generating report...", "\u0930\u093F\u092A\u094B\u0930\u094D\u091F \u092C\u0928\u093E \u0930\u0939\u0947 \u0939\u0948\u0902...", "\u0C28\u0C3F\u0C35\u0C47\u0C26\u0C3F\u0C15 \u0C30\u0C42\u0C2A\u0C4A\u0C02\u0C26\u0C3F\u0C38\u0C4D\u0C24\u0C4B\u0C02\u0C26\u0C3F..."),
-  ]
+  const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const [currentTime, setCurrentTime] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) return 100
-        return p + 1
-      })
-    }, 33)
+      setCurrentTime(t => t + 50)
+    }, 50)
     return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMessageIndex((i) => (i + 1) % messages.length)
-    }, 700)
-    return () => clearInterval(interval)
-  }, [messages.length])
+    processingStages.forEach((stage) => {
+      setTimeout(() => {
+        setCompletedSteps((prev) => [...prev, stage.id - 1])
+      }, stage.duration)
+    })
+  }, [])
+
+  const progressPercent = Math.min((currentTime / totalProcessingTime) * 100, 100)
 
   return (
     <div className="flex flex-col items-center gap-6">
-      {/* Image with Scanner Effect */}
       <div className="relative w-full overflow-hidden rounded-2xl">
         <img
           src={imageUrl}
@@ -353,55 +356,54 @@ function ProcessingScreen({ imageUrl }: { imageUrl: string }) {
           crossOrigin="anonymous"
         />
         <div
-          className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"
-          style={{
-            animation: "scanLine 2s ease-in-out infinite",
-            top: `${(progress % 100)}%`,
-          }}
-        />
-        <div
           className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-primary"
           style={{ animation: "pulseRing 1.5s ease-in-out infinite" }}
         />
       </div>
 
-      {/* Circular Progress */}
-      <div className="relative flex size-28 items-center justify-center">
-        <svg className="size-28 -rotate-90" viewBox="0 0 100 100">
-          <circle
-            cx="50" cy="50" r="42" fill="none"
-            stroke="var(--color-muted)" strokeWidth="6"
-          />
-          <circle
-            cx="50" cy="50" r="42" fill="none"
-            stroke="var(--color-primary)" strokeWidth="6"
-            strokeLinecap="round"
-            strokeDasharray={`${2 * Math.PI * 42}`}
-            strokeDashoffset={`${2 * Math.PI * 42 * (1 - progress / 100)}`}
-            className="transition-all duration-100"
-          />
-        </svg>
-        <div className="absolute flex flex-col items-center">
-          <span className="text-2xl font-bold text-foreground">{Math.min(progress, 100)}%</span>
-          <span className="text-[10px] text-muted-foreground">~3 sec</span>
-        </div>
+      <div className="w-full space-y-3">
+        {processingStages.map((stage) => {
+          const isCompleted = completedSteps.includes(stage.id - 1)
+          const isCurrent = !isCompleted && completedSteps.length === stage.id - 1
+
+          return (
+            <div
+              key={stage.id}
+              className={`flex items-start gap-3 p-3 rounded-lg transition-colors ${
+                isCurrent ? "bg-primary/10" : ""
+              }`}
+              style={{
+                borderLeft: isCurrent ? "4px solid var(--color-primary)" : "4px solid transparent"
+              }}
+            >
+              <div className="flex items-center justify-center size-10 rounded-full bg-muted flex-shrink-0 mt-0.5">
+                {isCompleted ? (
+                  <span className="text-lg">✓</span>
+                ) : isCurrent ? (
+                  <div className="size-5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                ) : (
+                  <span className="text-lg">{stage.icon}</span>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className={`text-sm font-semibold ${isCompleted ? "text-muted-foreground" : "text-foreground"}`}>
+                  {stage.title}
+                </p>
+                <p className="text-xs text-muted-foreground">{stage.detail}</p>
+              </div>
+            </div>
+          )
+        })}
       </div>
 
-      {/* Animated Message */}
-      <p
-        className="text-center font-medium text-foreground"
-        style={{ fontSize: "clamp(0.85rem, 2.5vw, 1.1rem)" }}
-      >
-        {messages[messageIndex]}
-      </p>
+      <div className="w-full bg-muted rounded-full h-2">
+        <div
+          className="bg-primary h-2 rounded-full transition-all duration-100"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
 
-      {/* CSS Animations */}
       <style jsx>{`
-        @keyframes scanLine {
-          0% { top: 0%; }
-          50% { top: 98%; }
-          100% { top: 0%; }
-        }
         @keyframes pulseRing {
           0%, 100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(45,106,79,0.4); }
           50% { opacity: 1; box-shadow: 0 0 0 8px rgba(45,106,79,0); }
@@ -461,6 +463,26 @@ function ResultsScreen({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Low Confidence Warning Banner */}
+      {result.confidence < 75 && (
+        <div className="bg-destructive/15 border border-destructive/30 rounded-lg p-3 flex gap-3">
+          <span className="text-xl flex-shrink-0">⚠️</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-destructive">Low confidence detected</p>
+            <p className="text-xs text-destructive/80 mt-1">For best results, photograph the most affected leaf in direct sunlight, held flat.</p>
+          </div>
+          <button
+            onClick={() => {
+              setAnimatedConfidence(0)
+              setAnimatedCrop(0)
+            }}
+            className="text-xs font-semibold text-destructive hover:text-destructive/80 whitespace-nowrap ml-2"
+          >
+            Retake
+          </button>
+        </div>
+      )}
+
       {/* TOP: Disease Identified */}
       <Card className="animate-in slide-in-from-bottom-4 overflow-hidden border-primary/20 duration-500">
         <CardContent className="p-4">
@@ -476,9 +498,16 @@ function ResultsScreen({
               </div>
             )}
             <div className="flex flex-1 flex-col gap-1.5">
-              <h2 className="font-serif text-lg font-bold text-foreground" style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}>
-                {result.name}
-              </h2>
+              <div>
+                <h2 className="font-serif text-lg font-bold text-foreground" style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}>
+                  {result.name}
+                </h2>
+                {result.teluguName && (
+                  <p className="text-xs text-primary font-medium">
+                    {result.teluguName}
+                  </p>
+                )}
+              </div>
               <p className="text-xs italic text-muted-foreground">
                 {result.scientificName}
               </p>
